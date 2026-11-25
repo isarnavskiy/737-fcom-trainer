@@ -1,0 +1,182 @@
+.ll-page {
+  --ll-border: #333c45;
+  --ll-subtle-border: #29323a;
+  --ll-secondary: #b6c1cb;
+  --ll-muted: #9caab9;
+  --ll-accent: #ff885d;
+  --ll-aqua: #87c5c9;
+  --ll-success: #95dfb4;
+  color: #edf0f2;
+  padding: clamp(21px, 3.5vw, 44px) 0 clamp(28px, 5vw, 64px);
+  line-height: 1.55;
+}
+.ll-page *, .ll-page *::before, .ll-page *::after {box-sizing: border-box}
+.ll-page h1,.ll-page h2,.ll-page h3,.ll-page p,.ll-page figure {margin: 0}
+.ll-page h1,.ll-page h2,.ll-page h3 {text-wrap: pretty; line-height: 1.18}
+.ll-page .ll-head h1 {font-size: clamp(2.1rem, 5vw, 3.55rem); letter-spacing: -.047em; font-weight: 650; max-width: 24ch}
+.ll-head>p {margin-top: 14px; max-width: 68ch; font-size: 1.065rem; color: var(--ll-secondary)}
+.ll-back,.ll-meta,.ll-modes,.ll-card>h2,.ll-ref,.ll-read-row>p,.ll-node,.ll-situation h2,.ll-feedback h3,.ll-review article strong,.ll-option,.ll-answer-state {display: flex; align-items: center}
+.ll-back {gap: 10px; font-size: .875rem; color: var(--ll-muted); flex-wrap: wrap; margin-bottom: clamp(21px, 4vw, 38px)}
+.ll-back a,.ll-ref {display: inline-flex; align-items: center; gap: 6px; color: var(--ll-secondary); text-decoration: none}
+.ll-back a:hover,.ll-page .ll-ref:hover,.ll-source a:hover {color: #fff; text-decoration: underline; text-underline-offset: .22em}
+.ll-back>span[aria-hidden] {color: #62717f}
+.ll-meta {flex-wrap: wrap; gap: 8px 16px; margin-bottom: 12px; color: var(--ll-muted); font-size: .84rem}
+.ll-meta>span:first-child {display: inline-flex; align-items: center; gap: 7px; font-weight: 650; color: var(--ll-accent)}
+.ll-meta .ll-source {display: inline-flex; align-items: baseline; flex-wrap: wrap; gap: 5px 12px}
+.ll-source a {color: var(--ll-secondary); text-underline-offset: .2em}
+.ll-modes {gap: 21px; border-bottom: 1px solid var(--ll-border); margin: 24px 0; flex-wrap: wrap}
+.ll-modes a {display: inline-flex; gap: 8px; align-items: center; color: var(--ll-secondary); padding: 12px 2px; border-bottom: 2px solid transparent; margin-bottom: -1px; text-decoration: none; font-weight: 600}
+.ll-modes a:hover,.ll-modes a[aria-current] {color: #fff}
+.ll-modes a[aria-current] {border-bottom-color: var(--ll-accent)}
+.ll-study-grid {display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); gap: 18px; align-items: start}
+.ll-content {display: grid; gap: 18px; min-width: 0}
+.ll-card {border: 1px solid var(--ll-subtle-border); background: #161c22; border-radius: 15px; padding: clamp(18px, 2.6vw, 31px); min-width: 0}
+.ll-page .ll-card h2 {font-size: clamp(1.14rem, 2.15vw, 1.42rem); letter-spacing: -.025em; font-weight: 650}
+.ll-card>h2 {gap: 9px; margin-bottom: 18px}
+.ll-card>h2>svg,.ll-read-row svg,.ll-ref svg,.ll-back a svg,.ll-meta svg {flex-shrink: 0}
+.ll-card>h2>svg {color: var(--ll-accent)}
+.ll-reading article+article {border-top: 1px solid var(--ll-subtle-border); padding-top: 20px; margin-top: 20px}
+.ll-page .ll-card h3 {letter-spacing: -.012em; font-size: 1.05rem; font-weight: 650}
+.ll-reading article p,.ll-next>p,.ll-result-intro>div>p:last-child,.ll-node-detail p,.ll-lab>p {margin-top: 7px; color: var(--ll-secondary)}
+.ll-reading p,.ll-node-detail p,.ll-next>p {line-height: 1.63}
+.ll-map-board {display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); align-items: center; gap: 10px}
+.ll-art {display: flex; justify-content: center; align-items: center; background-color: #10171e; background-image: radial-gradient(#32404b .75px, transparent .85px); background-size: 9px 9px; border: 1px solid var(--ll-subtle-border); border-radius: 9px; min-height: 125px}
+.ll-art-svg {display: block; width: 100%; min-width: 0; max-height: 190px; color: #a8c4cd}
+.ll-art .ll-frame {stroke: #42535f}
+.ll-art .ll-cross {stroke: #34434c; stroke-dasharray: 2 5}
+.ll-art .ll-fill {fill: #202c35}
+.ll-art .ll-accent {stroke: #fd9673; stroke-width: 2}
+.ll-art .ll-point {fill: #14232a; stroke: #e6c19e; stroke-width: 2}
+.ll-map-picks {display: grid; gap: 6px}
+.ll-node {gap: 9px; min-height: 39px; padding: 8px 10px; border: 1px solid transparent; border-radius: 7px; font: inherit; font-size: .9rem; font-weight: 550; line-height: 1.25; text-align: left; color: var(--ll-secondary); background: #1c242c; cursor: pointer; overflow-wrap: anywhere}
+.ll-node:hover {border-color: #51616e}
+.ll-node i {background: #758492; border-radius: 50%; width: 6px; height: 6px; flex: 0 0 6px}
+.ll-node[aria-pressed=true] {border-color: #a6583e; color: #ffc6ad; background: #322721}
+.ll-node[aria-pressed=true] i {background-color: #ff976b}
+.ll-node-detail {border-top: 1px solid var(--ll-subtle-border); margin-top: 17px; padding-top: 15px}
+.ll-next>p {margin-bottom: 16px}
+.ll-read-row,.ll-result-actions,.ll-submit-row {display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px}
+.ll-read-row {border-top: 1px solid var(--ll-border); padding: 19px 0 0; margin-top: 22px; color: var(--ll-muted)}
+.ll-read-row>p {font-size: .875rem; gap: 8px}
+.ll-page .btn:disabled {opacity: .54; cursor: default}
+.ll-page .ll-read:disabled {color: var(--ll-success); opacity: .9}
+.ll-practice,.ll-result {max-width: 870px; margin: 0 auto}
+.ll-practice-top {display: flex; justify-content: space-between; align-items: center; gap: 12px}
+.ll-step-label,.ll-situation h2,.ll-review article small {font-weight: 650; color: var(--ll-accent); font-size: .875rem}
+.ll-page .ll-ref {font-size: .9rem; font-weight: 550}
+.ll-track {display: flex; gap: 6px; margin: 12px 0 23px}
+.ll-track>span {height: 4px; border-radius: 8px; background-color: #333e49; flex: 1}
+.ll-track .ll-current {background: var(--ll-accent)}
+.ll-track .ll-hit {background: #78bf9b}
+.ll-track .ll-miss {background: #df9275}
+.ll-situation {background-color: #1d252d; border-left: 3px solid #8596a6; border-radius: 0 8px 8px 0; padding: 12px 16px; margin-bottom: 22px}
+.ll-page .ll-situation h2 {font-size: .85rem; color: #bdcad5}
+.ll-situation p {margin-top: 5px; color: #edf0f2}
+.ll-practice fieldset {border: 0; padding: 0; margin: 0; min-width: 0}
+.ll-practice legend {padding: 0; font-size: clamp(1.12rem, 2.6vw, 1.4rem); font-weight: 640; letter-spacing: -.02em; line-height: 1.28; margin-bottom: 13px}
+.ll-options {display: grid; gap: 9px}
+.ll-option {border: 1px solid #3b454f; border-radius: 9px; gap: 11px; padding: 13px 14px; background: #171e25; line-height: 1.45; cursor: pointer; transition: background .15s, border-color .15s}
+.ll-option input {accent-color: var(--ll-accent); width: 18px; height: 18px; margin: 0; flex: 0 0 auto}
+.ll-option:hover:has(input:enabled) {border-color: #687888}
+.ll-option:has(input:checked) {border-color: #bc765b; background: #2b2422}
+.ll-option:has(input:focus-visible) {outline: 2px solid #9bcdff; outline-offset: 2px}
+.ll-option:has(input:disabled) {cursor: default}
+.ll-option.ll-option-right,.ll-option.ll-option-right:has(input:checked) {border-color: #4e8069; background: #1c2d26}
+.ll-option.ll-option-wrong {border-color: #ab7567; background: #312723}
+.ll-answer-state {gap: 4px; flex: 0 0 auto; margin-left: auto; font-size: .795rem; font-weight: 600; color: #f3bba7}
+.ll-option-right .ll-answer-state {color: var(--ll-success)}
+.ll-feedback {border-left: 3px solid #dd957a; padding-left: 15px; margin: 18px 0 5px}
+.ll-correct {border-left-color: #82c6a0}
+.ll-feedback h3 {gap: 7px; color: #f4b39a}
+.ll-correct h3 {color: var(--ll-success)}
+.ll-feedback p {margin-top: 6px; color: var(--ll-secondary)}
+.ll-submit-row {justify-content: flex-end; margin-top: 18px}
+.ll-result-intro {display: flex; align-items: center; gap: clamp(16px, 3.2vw, 30px)}
+.ll-score {flex: 0 0 auto; width: 102px; aspect-ratio: 1; background: conic-gradient(var(--ll-accent) var(--ll-score), #313d47 0); border-radius: 50%; padding: 5px}
+.ll-score>span {width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #161c22; border-radius: 50%; color: var(--ll-muted); font-size: .8rem}
+.ll-score strong {font-size: 1.9rem; color: #fcf6f1; line-height: 1.05; letter-spacing: -.06em}
+.ll-score small {font-size: .66em; color: var(--ll-muted)}
+.ll-result-intro h2 {margin-top: 4px}
+.ll-review {border: 1px solid var(--ll-border); border-radius: 9px; margin-top: 22px; padding: 12px 16px}
+.ll-review summary {cursor: pointer; font-weight: 650}
+.ll-review article {border-top: 1px solid var(--ll-border); padding-top: 14px; margin-top: 14px}
+.ll-review article small {font-size: .8rem; color: var(--ll-muted)}
+.ll-review article h3 {margin: 4px 0 8px}
+.ll-review article strong {gap: 6px; color: var(--ll-success); font-weight: 560}
+.ll-review article strong svg {flex-shrink: 0}
+.ll-review article p {margin-top: 5px; color: var(--ll-secondary)}
+.ll-result-actions {justify-content: flex-start; margin-top: 22px}
+.ll-exhibit {border: 1px solid var(--ll-border); border-radius: 9px; overflow-x: auto; margin: 14px 0 22px; background: #12191f}
+.ll-exhibit table {width: 100%; border-collapse: collapse; font-size: .92rem; line-height: 1.4}
+.ll-exhibit caption {text-align: left; font-size: .88rem; font-weight: 600; color: #c5d6e0; padding: 11px 12px; background: #202a33; caption-side: top}
+.ll-exhibit th,.ll-exhibit td {padding: 9px 12px; text-align: left; border-top: 1px solid var(--ll-border)}
+.ll-exhibit thead th {font-size: .82rem; color: var(--ll-muted); font-weight: 550}
+.ll-exhibit tbody th {font-weight: 550}
+.ll-panel-readout {border: 1px solid var(--ll-border); border-radius: 9px; padding: 14px; margin: 10px 0 20px; background: #10171c}
+.ll-panel-readout figcaption {color: var(--ll-secondary); font-weight: 600; font-size: .87rem; margin-bottom: 8px}
+.ll-panel-readout dl {display: flex; flex-wrap: wrap; gap: 6px; margin: 0}
+.ll-panel-readout dl>div {flex: 1 1 100px; padding: 9px 11px; background: #1c252b; border-radius: 5px; min-width: 0}
+.ll-panel-readout dt {font-size: .78rem; color: var(--ll-muted)}
+.ll-panel-readout dd {font: 600 .98rem/1.42 ui-monospace, Consolas, monospace; color: #a6d9d7; margin: 3px 0 0; overflow-wrap: anywhere}
+.ll-lab {margin-top: 18px}
+.ll-lab h2 {margin-bottom: 6px}
+.ll-lab-grid {display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 25px; margin-top: 17px}
+.ll-lab-controls {display: grid; align-items: center; gap: 13px}
+.ll-lab-controls label {display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap; font-size: .93rem}
+.ll-lab-controls select {border: 1px solid var(--ll-border); border-radius: 5px; color: #fff; background-color: #172027; padding: 6px 10px; font: inherit}
+.ll-lab-controls output,.ll-lab-res dd {font-family: ui-monospace, Consolas, monospace; font-weight: 600}
+.ll-lab-controls output {color: #abd8d9}
+.ll-lab-controls input {width: 100%; margin: 0; accent-color: var(--ll-accent)}
+.ll-lab-res {background: #10171c; border: 1px solid var(--ll-border); border-radius: 8px; padding: 7px 13px; margin: 0}
+.ll-lab-res>div {display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 9px; padding: 7px 0}
+.ll-lab-res>div+div {border-top: 1px solid var(--ll-subtle-border)}
+.ll-lab-res dt {font-size: .88rem; color: var(--ll-secondary)}
+.ll-lab-res dd {margin: 0; font-size: .88rem; color: var(--ll-success)}
+.ll-lab-res dd[data-ll-over="true"] {color: #ffc4a4}
+.ll-lab-res dd small {font: inherit; font-size: .79rem}
+.ll-page :is(button,a,input,select,summary,[tabindex="0"]):focus-visible {outline: 2px solid #9bcdff; outline-offset: 3px}
+.ll-page :is(legend,.ll-feedback,.ll-result-intro h2):focus {outline: none}
+@media(max-width: 850px) {
+  .ll-map-board {grid-template-columns: 1fr}
+  .ll-art {min-height: 108px}
+  .ll-art-svg {height: 130px}
+}
+@media(max-width: 710px) {
+  .ll-study-grid {grid-template-columns: 1fr}
+  .ll-map-board {grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr)}
+  .ll-study-grid .ll-content {display: contents}
+  .ll-study-grid .ll-map {order: -1}
+  .ll-lab-grid {grid-template-columns: 1fr; gap: 15px}
+}
+@media(max-width: 480px) {
+  .ll-card {border-radius: 12px; padding: 16px}
+  .ll-option {display: grid; grid-template-columns: 18px 1fr; align-items: start}
+  .ll-option input {align-self: center}
+  .ll-answer-state {grid-column: 2; margin: 0}
+  .ll-score {width: 79px}
+  .ll-submit-row .btn,.ll-read-row .btn {width: 100%; justify-content: center}
+  .ll-practice legend {font-size: 1.13rem}
+  .ll-map-board {grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: 6px}
+  .ll-node {min-height: 42px}
+  .ll-exhibit th,.ll-exhibit td {padding: 7px}
+}
+.ll-region {color: #b7d3dd; fill: #293d48; stroke: currentColor; cursor: pointer; transition: color .16s, fill .16s}
+.ll-region:hover {color: #f0dfd1}
+.ll-region.ll-selected {color: #ffc4a3; fill: #aa613d; stroke-width: 2}
+.ll-region text {stroke: none; fill: #eaf2f4; font: 600 11px ui-monospace, Consolas, monospace; letter-spacing: .5px}
+.ll-exhibit caption small {display: block; font-size: .77rem; font-weight: 400; color: var(--ll-muted); margin-top: 2px}
+.ll-exhibit tbody td {padding: 0}
+.ll-exhibit td button {display: block; width: 100%; min-height: 39px; padding: 8px 12px; color: inherit; text-align: left; font: inherit; background: transparent; border: 0; border-radius: 0; cursor: pointer}
+.ll-exhibit td button:hover {background: #2a3843}
+.ll-exhibit .ll-row-selected>td,.ll-exhibit .ll-col-selected {background: #26333d}
+.ll-exhibit td button[aria-pressed="true"] {color: #ffd3b9; background: #56382a; box-shadow: inset 0 0 0 1px #c88462}
+@media(max-width: 480px) {.ll-exhibit td button {padding: 7px}}
+.ll-radio-lab {margin-top: 18px}
+.ll-radio-lab h2 {margin-bottom: 6px}
+.ll-radio-lab>p {color: var(--ll-secondary)}
+.ll-radio-windows,.ll-radio-tools {display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 16px}
+.ll-radio-windows>div {flex: 1 1 140px; padding: 11px 15px; border: 1px solid #324349; border-radius: 8px; background: #10191c}
+.ll-radio-windows span {display: block; color: #abbdc3; font-size: .82rem}
+.ll-radio-windows output {font: 600 clamp(1.55rem, 4vw, 2.1rem)/1.3 ui-monospace, Consolas, monospace; letter-spacing: .035em; color: #a9dcd5}
+.ll-radio-tools label {display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: .91rem}
+.ll-radio-tools select {border: 1px solid var(--ll-border); border-radius: 5px; color: #fff; background: #172027; padding: 8px 10px; font: inherit}
