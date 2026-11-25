@@ -1,49 +1,77 @@
-# Flightdeck / 737
+<p align="center">
+  <img src=".github/media/flightdeck-cover.jpg" width="1280" alt="Flightdeck · Интерактивный тренажёр Boeing 737-800. На фотографии — приборная доска самолёта VT-JBE.">
+</p>
 
-**[Открыть тренажёр Boeing 737-800](https://isarnavskiy.github.io/737-fcom-trainer/)** · [Первоисточники](https://isarnavskiy.github.io/737-fcom-trainer/#reference) · [Скачать для занятий без интернета](https://github.com/isarnavskiy/737-fcom-trainer/releases/latest/download/flightdeck-737.html)
+<p align="center">
+  <a href="https://isarnavskiy.github.io/737-fcom-trainer/"><img src=".github/media/launch.png" width="280" height="56" alt="Запустить тренажёр Boeing 737-800"></a>
+</p>
 
-Ссылка открывает кабину в браузере на компьютере или телефоне. Выберите прибор на фотографии, рассмотрите его крупным планом и нажмите «Задание на приборе». Для занятий достаточно браузера. Кнопка «Поделиться» копирует ссылку на открытый экран, а QR-код открывает кабину на телефоне.
+<p align="center">
+  Найдите прибор в кабине, попробуйте его в работе и сверьтесь с руководством Boeing 737.<br>
+  На русском языке, в браузере компьютера или телефона. Установка и регистрация не нужны.
+</p>
 
-[![Передняя приборная доска Boeing 737-800 Jet Airways, борт VT-JBE. Фотография Kurush Pawar](assets/cockpit-overview.webp)](https://isarnavskiy.github.io/737-fcom-trainer/)
+<p align="center">
+  <a href="https://isarnavskiy.github.io/737-fcom-trainer/#theory"><b>Уроки</b></a> &nbsp;·&nbsp;
+  <a href="https://isarnavskiy.github.io/737-fcom-trainer/#scenarios"><b>Сценарии</b></a> &nbsp;·&nbsp;
+  <a href="https://isarnavskiy.github.io/737-fcom-trainer/#atlas"><b>Атлас FCOM</b></a> &nbsp;·&nbsp;
+  <a href="https://isarnavskiy.github.io/737-fcom-trainer/#reference"><b>Первоисточники</b></a>
+</p>
 
-Фото Kurush Pawar, CC BY-SA 2.0. [Авторы обоих снимков и условия использования](PHOTO-CREDITS.md)
+## Первое занятие в кабине
 
-## С чего начать
+Начните с основного пилотажного дисплея командира. Найдите его на фотографии, прочитайте скорость по левой шкале и высоту по правой. После ответа тренажёр покажет разбор. Нажмите на первый снимок, чтобы начать это упражнение. Второй откроет пример из атласа — схему регулирования давления в кабине.
 
-| Задача | Что можно сделать |
+<p align="center">
+  <a href="https://isarnavskiy.github.io/737-fcom-trainer/#cockpit/pfd-read"><img src=".github/media/practice-preview.png" width="360" alt="Открыть упражнение на пилотажном дисплее PFD"></a>
+  <a href="https://isarnavskiy.github.io/737-fcom-trainer/#topic/v2-0159"><img src=".github/media/atlas-preview.png" width="360" alt="Открыть схему регулирования давления в кабине, том 2, страница 162"></a>
+</p>
+
+[Считать скорость и высоту](https://isarnavskiy.github.io/737-fcom-trainer/#cockpit/pfd-read) · [Выставить курс на MCP](https://isarnavskiy.github.io/737-fcom-trainer/#cockpit/mcp-heading) · [Измерить частоту генератора](https://isarnavskiy.github.io/737-fcom-trainer/#cockpit/electric-meter)
+
+## Выберите, чем заняться
+
+| Раздел | Что внутри |
 | --- | --- |
-| [Осмотреть кабину](https://isarnavskiy.github.io/737-fcom-trainer/#cockpit) | Найти 13 приборов и панелей на двух фотографиях. Для каждого есть упражнение, связанный урок и ссылка на FCOM. |
-| [Попробовать прибор](https://isarnavskiy.github.io/737-fcom-trainer/#cockpit/pfd-read) | Считать скорость и высоту с PFD. В других упражнениях можно изменить масштаб карты, выбрать курс на MCP или прочитать показания на верхней панели. |
-| [Пройти курс](https://isarnavskiy.github.io/737-fcom-trainer/#theory) | 61 авторский урок по ограничениям, процедурам, характеристикам и системам. После урока можно сразу открыть его сценарий. |
-| [Разобрать ситуацию](https://isarnavskiy.github.io/737-fcom-trainer/#scenarios) | 61 сценарий и 183 решения с объяснениями. [Журнал](https://isarnavskiy.github.io/737-fcom-trainer/#progress) сохраняет результаты и темы для повторения на этом устройстве. |
-| [Найти тему по FCOM](https://isarnavskiy.github.io/737-fcom-trainer/#atlas) | В атласе 2 403 тематические закладки двух томов. Поиск ведёт к карточкам с пояснениями, фрагментами и ссылками на руководство. Для разделов и подразделов подготовлены 186 авторских заметок. |
+| [Кабина](https://isarnavskiy.github.io/737-fcom-trainer/#cockpit) | 13 приборов и панелей на двух фотографиях. Каждый можно рассмотреть крупнее и попробовать в отдельном задании. |
+| [Теория](https://isarnavskiy.github.io/737-fcom-trainer/#theory) | 61 урок по ограничениям, процедурам, характеристикам и системам самолёта. Из урока можно перейти к сценарию и страницам руководства. |
+| [Сценарии](https://isarnavskiy.github.io/737-fcom-trainer/#scenarios) | 61 ситуация и 183 решения с объяснениями. [Журнал прогресса](https://isarnavskiy.github.io/737-fcom-trainer/#progress) запоминает результаты и темы для повторения на этом устройстве. |
+| [Атлас FCOM](https://isarnavskiy.github.io/737-fcom-trainer/#atlas) | Поиск по 2 403 тематическим закладкам двух томов. В карточках есть пояснения, номера страниц и связанные занятия. Для разделов и подразделов подготовлены 186 авторских заметок. |
 
-## Документы и первоисточники
+### Заниматься без интернета
 
-За основу взят русский перевод **737 Flight Crew Operations Manual**, D6-27370-8AS-UTR. На титульных страницах указан перевод с помощью ИИ и приоритет английского оригинала. Номера ссылок в тренажёре соответствуют страницам PDF, включая титульные листы.
+Скачайте файл и откройте его в браузере. Кабина, уроки, атлас и документ FAA уже внутри. На телефоне можно открыть сайт по QR-коду из меню «Поделиться».
 
-| Том | Содержание | Оглавление | Первоисточник |
-| --- | --- | --- | --- |
-| 1 · 1 484 страницы | Ограничения, нормальные и дополнительные процедуры, предполётные и полётные характеристики | [1 306 закладок](https://isarnavskiy.github.io/737-fcom-trainer/#atlas/1) | [Открыть или подключить том 1](https://isarnavskiy.github.io/737-fcom-trainer/#reference/1/1) |
-| 2 · 1 400 страниц | Устройство самолёта и работа систем, главы 1–15 | [1 097 закладок](https://isarnavskiy.github.io/737-fcom-trainer/#atlas/2) | [Открыть или подключить том 2](https://isarnavskiy.github.io/737-fcom-trainer/#reference/2/1) |
+**[Скачать автономный тренажёр · HTML](https://github.com/isarnavskiy/737-fcom-trainer/releases/latest/download/flightdeck-737.html)** · [Все выпуски](https://github.com/isarnavskiy/737-fcom-trainer/releases)
 
-На публичном сайте перетащите имеющиеся у вас PDF обоих томов в раздел «Первоисточники». Браузер сверит файлы с изданием курса и запомнит их на устройстве. После этого ссылки из уроков, кабины и атласа открывают соответствующую страницу. Для подключения используйте сайт по HTTPS или локальный сервер.
+## Документы и фотографии
 
-- **Boeing.** Доступ к англоязычному FCOM предоставляется по лицензии. [Руководства Boeing](https://services.boeing.com/training-solutions/flight-training/licensed-manuals) · [Портал MyBoeingFleet для эксплуатантов](https://services.boeing.com/operations/myboeingfleet-portal)
-- **FAA AC 120-71B.** Полный циркуляр о стандартных процедурах и обязанностях пилота, который контролирует полёт. PDF включён в репозиторий и автономный тренажёр. [Открыть PDF](docs/faa-ac-120-71b.pdf) · [Карточка документа у FAA](https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentid/1030486)
+В основе занятий русский перевод *737 Flight Crew Operations Manual*, D6-27370-8AS-UTR. В разделе «Первоисточники» можно выбрать оба PDF сразу. Браузер проверит издание и запомнит его на устройстве. После этого ссылка из урока или кабины откроет нужную страницу.
 
-Тренажёр предназначен для самостоятельного изучения и домашнего симулятора. Для лётной работы применяется действующая утверждённая документация эксплуатанта.
+| Том | Содержание | Перейти |
+| --- | --- | --- |
+| **Том 1** · 1 484 страницы | Ограничения, нормальные и дополнительные процедуры, предполётные и полётные характеристики | [Оглавление](https://isarnavskiy.github.io/737-fcom-trainer/#atlas/1) · [Открыть PDF](https://isarnavskiy.github.io/737-fcom-trainer/#reference/1/1) |
+| **Том 2** · 1 400 страниц | Устройство самолёта и работа систем, главы 1–15 | [Оглавление](https://isarnavskiy.github.io/737-fcom-trainer/#atlas/2) · [Открыть PDF](https://isarnavskiy.github.io/737-fcom-trainer/#reference/2/1) |
 
-## Запуск из исходного кода
+- **Boeing** предоставляет англоязычный FCOM по лицензии. В русском издании указан перевод с помощью ИИ и приоритет английского оригинала. [Руководства Boeing](https://services.boeing.com/training-solutions/flight-training/licensed-manuals) · [MyBoeingFleet](https://services.boeing.com/operations/myboeingfleet-portal)
+- **FAA AC 120-71B** описывает стандартные процедуры и обязанности пилота, контролирующего полёт. [Читать PDF](docs/faa-ac-120-71b.pdf) · [Страница FAA](https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentID/1030486)
+- **Фотографии кабины** сняли Kurush Pawar и Artem Katranzhi. На обложке — Boeing 737-800 авиакомпании Jet Airways, борт VT-JBE. [Оригиналы и лицензия CC BY-SA 2.0](PHOTO-CREDITS.md)
 
-Откройте терминал в каталоге репозитория, запустите команду ниже и перейдите на [localhost:8000](http://localhost:8000).
+Тренажёр предназначен для самостоятельных занятий и домашнего симулятора. Для лётной работы применяют действующую утверждённую документацию эксплуатанта.
+
+<details>
+<summary><b>Запуск и сборка из исходного кода</b></summary>
+
+Запустите локальный сервер из каталога репозитория и откройте [localhost:8000](http://localhost:8000).
 
 ```sh
 python3 -m http.server 8000
 ```
 
-Чтобы собрать автономный HTML с фотографиями, атласом и документом FAA, выполните команду и откройте получившийся файл в браузере.
+Чтобы собрать автономный HTML с фотографиями, атласом и документом FAA, выполните команду и откройте полученный файл в браузере.
 
 ```sh
 python3 scripts/build-offline.py flightdeck-737.html
 ```
+
+</details>
