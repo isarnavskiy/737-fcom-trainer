@@ -1,6 +1,7 @@
 /* Flightdeck runs as a static app, including directly from a downloaded folder. */
 (() => {
   'use strict';
+  window.flightdeckAsset ||= path => path;
   const course = window.FCOM || [];
   const groups = {
     limits: {title:'Ограничения', number:'01', code:'L', color:'#ff9867', desc:'Условия применения, допуски приборов и ограничения по топливу.'},
@@ -10,6 +11,7 @@
     systems: {title:'Системы самолёта', number:'05', code:'SYS', color:'#8bd992', desc:'От дверей и наддува до шасси и сигнализации. Все 15 глав второго тома.'}
   };
   const paths = {
+    share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4m-6.8 7 6.8 4"/>',
     grid:'<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
     book:'<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5a2.5 2.5 0 0 0 0 5M4 5.5V20a2 2 0 0 0 2 2h14M8 7h8"/>',
     'book-open':'<path d="M3 4.5c3.5-1.3 6.4-.8 9 1.6 2.6-2.4 5.5-2.9 9-1.6v14c-3.5-1.2-6.4-.7-9 1.5-2.6-2.2-5.5-2.7-9-1.5zM12 6v14"/>',
@@ -56,19 +58,17 @@
     return course.find(l=>state.runs[l.id])||course.find(l=>state.read.includes(l.id)&&!state.results[l.id])||(!state.read.length&&!stats().done&&byId('normal-crew'))||course.find(l=>!state.read.includes(l.id)||!state.results[l.id])||byId('normal-crew')||course[0];}
   function ring(pct){return '<div class="ring"><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="ring-track" cx="50" cy="50" r="43"/><circle class="ring-value" cx="50" cy="50" r="43" pathLength="100" stroke-dasharray="'+pct+' 100"/></svg><strong>'+pct+'<small>%</small></strong></div>';}
   function statRows(s){return '<div class="stat-row"><span>'+icon('book-open',16)+'Прочитано уроков</span><b>'+s.read+' <i>/ '+total+'</i></b></div><div class="stat-row"><span>'+icon('play',16)+'Пройдено сценариев</span><b>'+s.done+' <i>/ '+total+'</i></b></div>';}
-  const nav=[['home','grid','Обзор'],['theory','book-open','Теория'],['scenarios','play','Практика'],['progress','chart','Прогресс']];
+  const nav=[['cockpit','gauge','Кабина'],['home','grid','Обзор'],['theory','book-open','Теория'],['scenarios','play','Практика'],['progress','chart','Прогресс']];
   function top(active){document.getElementById('primary-nav').innerHTML=nav.map(([id,ico,title])=>'<a href="#'+id+'" '+(id===active?'aria-current="page"':'')+'>'+icon(ico,17)+'<span>'+title+'</span></a>').join('');
     document.querySelector('.source-button').toggleAttribute('data-current',active==='reference');}
   const hgroup=(title,text)=>'<header class="page-heading"><h1>'+title+'</h1><p>'+text+'</p></header>';
   function moduleCards(){return Object.entries(groups).filter(([id])=>inGroup(id).length).map(([id,g])=>{
     const lessons=inGroup(id),n=lessons.length,read=lessons.filter(l=>state.read.includes(l.id)).length;
-    return '<a class="module-card" style="--tint:'+g.color+'" href="#theory/'+id+'"><div class="module-banner"><span class="module-code">'+g.code+'</span><img alt="" src="assets/module-'+id+'.svg"></div><div class="module-info"><h3>'+g.title+'</h3><div class="module-meta">'+icon('book-open',14)+n+' '+plural(n,'урок','урока','уроков')+'<span class="dot-sep">·</span>'+ (read?'Прочитано '+read:'Том '+(id==='systems'?2:1))+'</div></div></a>';}).join('');}
-  function dashboard(){const next=current(),s=stats(), resumed=Boolean(state.last||s.read||s.done), crew=next.id==='normal-crew';
+    return '<a class="module-card" style="--tint:'+g.color+'" href="#theory/'+id+'"><div class="module-banner"><span class="module-code">'+g.code+'</span><img alt="" src="'+window.flightdeckAsset('assets/module-'+id+'.svg')+'"></div><div class="module-info"><h3>'+g.title+'</h3><div class="module-meta">'+icon('book-open',14)+n+' '+plural(n,'урок','урока','уроков')+'<span class="dot-sep">·</span>'+ (read?'Прочитано '+read:'Том '+(id==='systems'?2:1))+'</div></div></a>';}).join('');}
+  function dashboard(){const next=current(),s=stats(), resumed=Boolean(state.last||s.read||s.done);
     const startMode=state.runs[next.id]||state.read.includes(next.id)&&!state.results[next.id]?'practice':'lesson';
-    const title=crew?'Работа экипажа':escape(next.title);
-    const heroDesc=crew?'Разберите роли PF и PM и проверьте, кто за что отвечает в кабине Boeing 737.':escape(next.summary);
     return hgroup('Учебный центр','Теория и практика по руководству Boeing 737-800.')+
-    '<section class="hero" aria-labelledby="hero-title"><div class="hero-photo"></div><div class="hero-content"><div class="hero-label"><span></span>'+(resumed?'Продолжить обучение':'Рекомендуемое занятие')+'</div><h2 id="hero-title">'+title+'</h2><p>'+heroDesc+'</p><div class="hero-bottom"><a class="btn btn-primary" href="#'+startMode+'/'+next.id+'">'+icon('play',17)+(resumed?'Продолжить занятие':'Начать занятие')+'</a><span class="hero-format">'+icon('layers',16)+'Теория + практика</span></div></div><span class="hero-caption"><i></i>737-800 <em>/</em> FLIGHT DECK</span></section>'+
+    '<section class="hero" aria-labelledby="hero-title"><div class="hero-photo"></div><div class="hero-content"><div class="hero-label"><span></span>Визуальная практика</div><h2 id="hero-title">В кабине Boeing 737</h2><p>Найдите прибор на фотографии, откройте его крупным планом и выполните задание.</p><div class="hero-bottom"><a class="btn btn-primary" href="#cockpit">'+icon('gauge',17)+'Открыть кабину</a><a class="hero-format" href="#'+startMode+'/'+next.id+'">'+icon('book-open',16)+(resumed?'Продолжить урок':'Начать с теории')+'</a></div></div><a class="hero-caption" href="#reference"><i></i>VT-JBE <em>/</em> Kurush Pawar</a></section>'+
     '<div class="dash-cols"><section class="module-section"><div class="section-head"><h2>Модули курса</h2><span class="head-count">'+Object.keys(groups).filter(id=>inGroup(id).length).length+'</span></div><div class="module-grid">'+moduleCards()+'</div></section><aside class="progress-aside"><div class="section-head"><h2>Мой прогресс</h2></div><div class="progress-panel"><div class="ring-row">'+ring(s.pct)+'<div><span class="side-kicker">Освоено курса</span><strong>'+(s.pct===100?'Курс пройден':s.pct===0?'Начало курса':'В процессе')+'</strong></div></div>'+statRows(s)+'<a href="#progress" class="panel-link">'+icon('chart',16)+'Открыть журнал</a></div>'+
     '<a class="quick-card" href="#scenarios"><span class="quick-icon">'+icon('compass',23)+'</span><span><b>Практика сценариев</b><small>Выбрать ситуацию</small></span>'+icon('chevron',17)+'</a></aside></div>';}
   function headingMeta(l){return '<span class="source-meta">Том '+(l.volume||1)+' <i>·</i> С. '+escape(l.pages)+'</span>';}
@@ -78,6 +78,7 @@
   function catalog(active,groupId){const practice=active==='scenarios',c=catalogState[active],g=groups[groupId];
     const title=practice?'Практика сценариев':'Библиотека теории';
     return hgroup(title,practice?'Выберите ситуацию, примите решение и разберите ответ по FCOM.':'Выберите модуль или найдите тему по названию, прибору или сокращению.')+
+      (practice?'<a class="catalog-cockpit" href="#cockpit/practice">'+icon('gauge',20)+'<span>Перейти к практике на приборах в кабине</span>'+icon('chevron',16)+'</a>':'')+
       '<div class="catalog-tools"><label class="searchbox">'+icon('search',19)+'<input id="catalog-search" type="search" autocomplete="off" aria-label="Поиск по темам" placeholder="Найти тему или сокращение…" value="'+escape(c.q)+'"></label><label class="status-select"><span class="sr-only">Статус обучения</span>'+icon('sliders',17)+'<select id="catalog-status">'+[['all','Любой статус'],['new','Не начато'],['done',practice?'Завершено':'Прочитано'],...(practice?[['running','В процессе'],['errors','С ошибками']]:[])].map(([k,v])=>'<option value="'+k+'" '+(c.status===k?'selected':'')+'>'+v+'</option>').join('')+'</select></label></div>'+
       '<div class="filter-chips" aria-label="Модули">'+[['','Все модули'],...Object.entries(groups).map(([id,v])=>[id,v.title])].map(([id,label])=>'<a class="chip" '+((g?groupId:'')===id?'aria-current="true"':'')+' href="#'+active+(id?'/'+id:'')+'">'+label+'</a>').join('')+'</div><div id="catalog-list" aria-live="polite"></div>';}
   function itemCard(l,practice){const g=groups[l.group],stat=statusFor(l,practice);
@@ -91,15 +92,17 @@
     document.querySelector('#catalog-list').innerHTML='<div class="catalog-caption">'+entries.length+' '+(practice?plural(entries.length,'сценарий','сценария','сценариев'):plural(entries.length,'урок','урока','уроков'))+'</div>'+(entries.length?'<div class="catalog-grid">'+entries.map(l=>itemCard(l,practice)).join('')+'</div>':'<div class="empty">'+icon('search',28)+'<h3>Совпадений нет</h3><p>Попробуйте другое слово или сбросьте фильтры.</p><button class="btn btn-secondary" id="clear-search">Сбросить фильтры</button></div>');
     const clear=document.querySelector('#clear-search');if(clear)clear.onclick=()=>{c.q='';c.status='all';go(active);};}
   function journal(){const s=stats(),rows=s.results.slice().sort((a,b)=>new Date(b[1].date)-new Date(a[1].date));
+    const cockpit=window.Cockpit.progress();
     return hgroup('Журнал прогресса','Здесь сохраняются прочитанные уроки, последние результаты и темы для повторения.')+
     '<div class="metrics-grid">'+[[s.pct+'%','Освоено курса','target'],[s.read+' / '+total,'Прочитано уроков','book-open'],[s.done+' / '+total,'Пройдено сценариев','play'],[s.accuracy===null?'—':s.accuracy+'%','Верных решений¹','check']].map(([v,t,i])=>'<div class="metric"><span>'+icon(i,18)+t+'</span><strong>'+v+'</strong></div>').join('')+'</div>'+
-    '<p class="result-note">¹ По последней завершённой попытке каждого сценария.</p><div class="journal-cols"><section class="journal-box"><h2>Прогресс по модулям</h2>'+Object.entries(groups).map(([id,g])=>{const ls=inGroup(id),n=ls.reduce((t,l)=>t+Number(state.read.includes(l.id))+Number(!!state.results[l.id]),0),max=ls.length*2;
+    '<p class="result-note">¹ По последней завершённой попытке каждого сценария курса.</p><a class="catalog-cockpit journal-cockpit" href="#cockpit/practice">'+icon('gauge',20)+'<span>Задания в кабине</span><b>'+cockpit.completed+' / '+cockpit.total+'</b>'+icon('chevron',16)+'</a><div class="journal-cols"><section class="journal-box"><h2>Прогресс по модулям</h2>'+Object.entries(groups).map(([id,g])=>{const ls=inGroup(id),n=ls.reduce((t,l)=>t+Number(state.read.includes(l.id))+Number(!!state.results[l.id]),0),max=ls.length*2;
      return '<a class="journal-module" href="#theory/'+id+'" style="--tint:'+g.color+'"><span><b>'+g.title+'</b><small>'+n+' / '+max+'</small></span><i><em style="width:'+(max?n/max*100:0)+'%"></em></i></a>';}).join('')+'</section><section class="journal-box"><h2>К повторению</h2>'+(s.redo.length?s.redo.map(([id,r])=>'<a class="journal-record" href="#practice/'+id+'"><b>'+escape(byId(id).scenario.title)+'</b><span>'+ (r.total-r.score)+' '+plural(r.total-r.score,'ошибка','ошибки','ошибок')+'</span></a>').join(''):'<p>Здесь появятся сценарии, в которых были ошибки. Из списка можно вернуться к разбору.</p>')+'</section></div>'+
     '<section class="journal-box"><h2>Результаты сценариев</h2>'+(rows.length?rows.map(([id,r])=>'<a class="journal-record" href="#practice/'+id+'"><div><b>'+escape(byId(id).scenario.title)+'</b><small>'+escape(new Date(r.date).toLocaleDateString('ru-RU'))+' · '+r.attempts+' '+plural(r.attempts,'попытка','попытки','попыток')+'</small></div><span>'+r.score+' / '+r.total+' верно</span></a>').join(''):'<p>Пройдите первый сценарий, чтобы увидеть результат и разбор ответов.</p><a href="#scenarios" class="btn btn-secondary">'+icon('play',16)+'Выбрать сценарий</a>')+'</section><p class="result-note">'+(state.sessionOnly?'Прогресс доступен в этой вкладке. Браузер заблокировал постоянное сохранение.':'Прогресс сохраняется в этом браузере на этом устройстве.')+'</p>';}
   let lastRoute='';
-  function render(){const raw=location.hash.slice(1)||'home';let [route,arg]=raw.split('/');let body,active;
+  function render(){const raw=location.hash.slice(1)||'cockpit';let [route,arg]=raw.split('/');let body,active;
     const main=document.getElementById('main');
-    if(route==='home'){active='home';body=dashboard();}
+    if(route==='cockpit'){active='cockpit';body=window.Cockpit.render(arg);}
+    else if(route==='home'){active='home';body=dashboard();}
     else if(route==='theory'||route==='scenarios'){active=route;body=catalog(active,arg);}
     else if((route==='lesson'||route==='practice')&&byId(arg)){active=route==='lesson'?'theory':'scenarios';state.last={id:arg,mode:route};save();body=window.RenderLesson(arg,route==='lesson'?'theory':'practice');}
     else if(route==='progress'){active=route;body=journal();}
@@ -110,11 +113,27 @@
       const c=catalogState[route];refreshCatalog(route,arg);
       document.getElementById('catalog-search').oninput=e=>{c.q=e.target.value;refreshCatalog(route,arg);};
       document.getElementById('catalog-status').onchange=e=>{c.status=e.target.value;refreshCatalog(route,arg);};
-    }else if((route==='lesson'||route==='practice')&&byId(arg))window.bindLesson(arg,route==='lesson'?'theory':'practice');
+    }else if(route==='cockpit')window.Cockpit.bind(arg);
+    else if((route==='lesson'||route==='practice')&&byId(arg))window.bindLesson(arg,route==='lesson'?'theory':'practice');
     else if(route==='reference')window.SourceDocs.bind();
     if(lastRoute!==raw){window.scrollTo(0,0);if(lastRoute)main.focus({preventScroll:true});lastRoute=raw;}
   }
   document.querySelectorAll('[data-icon]').forEach(e=>e.innerHTML=icon(e.dataset.icon,17));
+  const shareDialog=document.getElementById('share-dialog');
+  document.getElementById('share-open').addEventListener('click',()=>{
+    document.getElementById('share-status').textContent='';
+    shareDialog.showModal();
+  });
+  document.getElementById('share-copy').addEventListener('click',async()=>{
+    const field=document.getElementById('share-url'), status=document.getElementById('share-status');
+    try {
+      await navigator.clipboard.writeText(field.value);
+      status.textContent='Ссылка скопирована.';
+    } catch {
+      field.focus();field.select();
+      status.textContent='Ссылка выделена. Скопируйте её через меню устройства.';
+    }
+  });
   document.querySelector('.skip').addEventListener('click',e=>{e.preventDefault();document.getElementById('main').focus();});
   window.addEventListener('hashchange',render);render();
   window.SourceDocs?.init(()=>{if(/^(#reference|#lesson\/|#practice\/)/.test(location.hash))render();});

@@ -144,11 +144,16 @@
   function render() {
     return `<section class="src-view" aria-labelledby="src-heading">
       <div class="page-heading"><h1 id="src-heading">Справочник FCOM</h1>
-      <p>Подключите свои PDF, чтобы из урока открывать нужную страницу руководства. Файлы обрабатываются на вашем устройстве.</p></div>
+      <p>Кабина и весь курс доступны сразу. Подключите свои PDF, если хотите открывать страницы руководства прямо из уроков. Файлы обрабатываются на вашем устройстве.</p></div>
       <div class="src-books">${documents.map(volumeCard).join('')}</div>
       <section class="src-edition"><div class="src-edition-icon">${icon('book-open', 21)}</div>
         <div><h2>Об издании</h2><p><b>737 Flight Crew Operations Manual</b> · D6-27370-8AS-UTR. Уроки ссылаются на порядковые страницы двух PDF русского перевода. Название файла можно менять.</p>
         <p>На титульных страницах указано, что перевод выполнен с помощью ИИ. Тренажёр предназначен для самостоятельного изучения. Для лётной работы используют актуальные утверждённые документы эксплуатанта.</p></div></section>
+      <section class="src-edition"><div class="src-edition-icon">${icon('eye', 21)}</div>
+        <div><h2>Фотографии кабины</h2>
+        <p>Передняя панель Boeing 737-800, борт VT-JBE авиакомпании Jet Airways. Автор: Kurush Pawar. <a href="https://commons.wikimedia.org/wiki/File:VT-JBE_%288050804061%29.jpg" target="_blank" rel="noopener">VT-JBE</a></p>
+        <p>Потолочная панель Boeing 737 NG в Домодедово. Автор: Artem Katranzhi. <a href="https://commons.wikimedia.org/wiki/File:Domodedovo_IMG_2473_%288062172282%29.jpg" target="_blank" rel="noopener">Domodedovo IMG 2473</a></p>
+        <p>Оба снимка уменьшены и переведены в WebP. Разметка приборов наложена в интерфейсе. Фотографии и их адаптации доступны по лицензии <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>.</p></div></section>
       </section>`;
   }
 

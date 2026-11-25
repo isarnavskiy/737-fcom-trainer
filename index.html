@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0e1216">
-  <meta name="description" content="Изучайте Boeing 737-800 по русскому переводу FCOM. Интерактивные схемы, учебные сценарии и журнал результатов.">
+  <meta name="description" content="Откройте кабину Boeing 737-800 в браузере. Исследуйте приборы на фотографиях, выполняйте задания и изучайте теорию по FCOM.">
   <title>Flightdeck · Тренажёр Boeing 737</title>
   <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="lesson.css">
   <link rel="stylesheet" href="source.css">
+  <link rel="stylesheet" href="cockpit.css">
+  <link rel="stylesheet" href="cockpit-panels.css">
   <script defer src="content-normal.js"></script>
   <script defer src="content-supplement.js"></script>
   <script defer src="content-performance.js"></script>
@@ -18,6 +20,8 @@
   <script defer src="content-systems-c.js"></script>
   <script defer src="source.js"></script>
   <script defer src="lesson.js"></script>
+  <script defer src="cockpit-panels.js"></script>
+  <script defer src="cockpit.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body>
@@ -25,9 +29,20 @@
   <header class="site-head"><div class="head-inner">
     <a href="#home" class="brand" aria-label="Flightdeck, обзор"><img src="assets/mark.svg" width="36" height="36" alt=""><span>Flightdeck<span class="brand-sep">/</span><span class="brand-model">737</span></span></a>
     <nav class="primary-nav" aria-label="Основная навигация" id="primary-nav"></nav>
-    <a class="source-button" href="#reference" aria-label="Справочник FCOM"><span data-icon="book-open"></span><span>Справочник FCOM</span></a>
+    <div class="head-tools">
+      <a class="source-button" href="#reference" aria-label="Справочник FCOM"><span data-icon="book-open"></span><span>Справочник FCOM</span></a>
+      <button class="share-trigger" id="share-open" aria-label="Поделиться тренажёром" title="Поделиться тренажёром"><span data-icon="share"></span></button>
+    </div>
   </div></header>
   <main id="main" tabindex="-1" class="shell"></main>
+  <dialog id="share-dialog" class="share-dialog" aria-labelledby="share-title">
+    <div class="share-title"><h2 id="share-title">Поделиться тренажёром</h2><form method="dialog"><button aria-label="Закрыть"><span data-icon="close"></span></button></form></div>
+    <p>Отправьте ссылку или наведите камеру телефона на QR-код. Кабина откроется без регистрации.</p>
+    <img class="share-qr" src="assets/launch-qr.png" width="164" height="164" alt="QR-код для открытия тренажёра на телефоне">
+    <label for="share-url">Ссылка на кабину</label>
+    <div class="share-fields"><input id="share-url" type="url" readonly value="https://isarnavskiy.github.io/737-fcom-trainer/"><button id="share-copy" type="button" class="btn btn-primary">Скопировать</button></div>
+    <div id="share-status" aria-live="polite"></div>
+  </dialog>
   <footer class="site-foot"><div><span class="foot-brand">Flightdeck / 737</span><span>Для самостоятельного изучения и домашнего симулятора.</span><a href="#reference">Источники и материалы</a></div></footer>
   <noscript>Для работы тренажёра включите JavaScript в браузере.</noscript>
 </body>

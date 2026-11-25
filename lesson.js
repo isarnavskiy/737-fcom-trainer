@@ -232,6 +232,11 @@
 
   function theory(lesson) {
     const hasRead = api().progress().read.includes(lesson.id);
+    const relatedPanels = {
+      'sys-efis-altitude':'pfd-read', 'limits-rvsm':'pfd-read', 'normal-fma':'mcp-heading',
+      'systems-fma-modes':'mcp-heading', 'sys-engine-rotors':'eng-compare', 'sys-power-conversion':'electric-meter'
+    };
+    const panel = window.CockpitPanels.exercises.find(item => item.id === relatedPanels[lesson.id]);
     return `<div class="ll-study-grid">
       <div class="ll-content">
         <section class="ll-card ll-reading" aria-labelledby="ll-theory-heading"><h2 id="ll-theory-heading">${icon('book')} Разбор темы</h2>
@@ -240,7 +245,8 @@
       </div><div class="ll-content">${concepts(lesson)}
       <section class="ll-card ll-next"><h2>${icon('target')} Проверить себя</h2>
       <h3>${esc(lesson.scenario.title)}</h3><p>${esc(lesson.scenario.context)}</p>
-      <a class="btn btn-primary" href="${route('practice', lesson)}">${icon('play', 17)} Открыть сценарий</a></section></div>
+      <a class="btn btn-primary" href="${route('practice', lesson)}">${icon('play', 17)} Открыть сценарий</a>
+      ${panel ? `<a class="ll-cockpit-link" href="#cockpit/${panel.id}">${icon('gauge', 17)} В кабину · ${esc(panel.title)}</a>` : ''}</section></div>
       </div>${lesson.id === 'limits-rvsm' ? altimeterLab() : ''}${lesson.id === 'systems-radio-audio' ? radioLab() : ''}<div class="ll-read-row"><p>${icon('book', 16)} ${esc(sourceLabel(lesson))}</p>
       <button class="btn btn-secondary ll-read" type="button" data-ll-read ${hasRead ? 'disabled' : ''}>${icon('check', 17)} ${hasRead ? 'Урок изучен' : 'Отметить как изученный'}</button></div>`;
   }
