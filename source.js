@@ -4,6 +4,7 @@
   const documents = [
     {
       part: 1, title: 'Ограничения, процедуры и характеристики', pages: 1484, size: 14176395,
+      datedLeaves: [[3, 'L.10.1', '15 марта 2018'], [4, 'L.10.2', '15 декабря 2021']],
       hash: '2ac56361adf1afb42981caaa8ddfa854fe51001a08c4423d2a431fc8ee089b9b',
       chapters: [
         ['Ограничения', 3, 'limits'], ['Нормальные процедуры', 15, 'normal'],
@@ -13,6 +14,7 @@
     },
     {
       part: 2, title: 'Описание систем самолёта', pages: 1400, size: 29084320,
+      datedLeaves: [[3, '1.TOC.1', '15 декабря 2021'], [21, '1.20.11', '18 июня 2020']],
       hash: '2a7559bbbef32c2ab233cecc5fece92f38180e225fa0a5538d373f5c755dbe1f',
       chapters: [
         ['Самолёт, аварийное оборудование, двери и окна', 3], ['Воздушные системы', 135],
@@ -26,14 +28,30 @@
     }
   ];
 
+  const boeingManuals = 'https://services.boeing.com/training-solutions/flight-training/licensed-manuals';
+  const faaCatalog = 'https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentid/1030486';
+  const faaOriginal = 'https://www.faa.gov/documentlibrary/media/advisory_circular/ac_120-71b.pdf';
+  const faaFile = 'docs/faa-ac-120-71b.pdf';
+  let faaLocalUrl;
   const attached = new Map();
   const notices = new Map();
   let connection;
   let restoring;
   let onChange = () => {};
+  let batchStatus = '';
   const icon = (name, size = 18) => window.Flight.icon(name, size);
   const esc = value => window.Flight.escape(String(value));
   const entry = part => documents.find(doc => doc.part === Number(part));
+
+  function bundled(part) {
+    if (globalThis.location?.protocol !== 'file:') return null;
+    const path = window.FlightdeckLocalVolumes?.[part];
+    return path === 'docs/fcom-ru-' + part + '.pdf' ? {url: path, bundled: true} : null;
+  }
+
+  function sourceFor(part) {
+    return bundled(part) || attached.get(part);
+  }
 
   function database() {
     if (connection) return connection;
@@ -74,6 +92,7 @@
     if (typeof onReady === 'function') onChange = onReady;
     if (restoring) return restoring;
     restoring = Promise.all(documents.map(async doc => {
+      if (bundled(doc.part)) return false;
       try {
         const item = await access('readonly', store => store.get(doc.part));
         if (item?.hash === doc.hash && item.file instanceof Blob && item.file.size === doc.size && !attached.has(doc.part)) {
@@ -86,74 +105,133 @@
     return restoring;
   }
 
+  function pageUrl(part, page) {
+    const doc = entry(part);
+    const number = Number(page);
+    if (!doc || !Number.isInteger(number) || number < 1 || number > doc.pages) return null;
+    const source = sourceFor(doc.part);
+    return source ? source.url + '#page=' + number : null;
+  }
+
+  function firstPage(range) {
+    return Number(String(range || '1').match(/\d+/)?.[0] || 1);
+  }
+
   function url(lesson) {
-    const doc = entry(lesson.part || (lesson.group === 'systems' ? 2 : 1));
-    const source = doc && attached.get(doc.part);
-    const page = Number(String(lesson.pages || '1').match(/\d+/)?.[0] || 1);
-    return source ? source.url + '#page=' + Math.max(1, Math.min(doc.pages, page)) : null;
+    return pageUrl(lesson.volume || lesson.part || (lesson.group === 'systems' ? 2 : 1), firstPage(lesson.pages));
+  }
+
+  function pageLink(part, page, label) {
+    const doc = entry(part);
+    const number = Number(page);
+    const caption = label || ('Открыть страницу ' + number);
+    if (!doc || !Number.isInteger(number) || number < 1 || number > doc.pages) return esc(caption);
+    const href = pageUrl(doc.part, number);
+    const title = 'Том ' + doc.part + ', страница ' + number;
+    return href
+      ? `<a class="src-range" href="${esc(href)}" target="_blank" rel="noopener" title="${title} · PDF в новой вкладке">${esc(caption)}</a>`
+      : `<a class="src-range" href="#reference/${doc.part}/${number}" title="${title} · выбрать PDF">${esc(caption)}</a>`;
   }
 
   function link(lesson) {
-    const part = lesson.part || (lesson.group === 'systems' ? 2 : 1);
-    const label = 'FCOM · том ' + part;
-    if (!url(lesson)) {
-      return `<a class="ll-ref" href="#reference">${icon('book-open', 16)} ${esc(label)} · с. ${esc(lesson.pages)} · Подключить PDF</a>`;
-    }
-    const ranges = String(lesson.pages).split(/[,;]/).map(value => value.trim()).filter(Boolean);
-    const anchors = ranges.map(range => {
-      const href = url({part, pages: range});
-      const accessibleLabel = `Открыть том ${part}, с. ${range}, в новой вкладке`;
-      return `<a class="src-range" href="${esc(href)}" target="_blank" rel="noopener" aria-label="${esc(accessibleLabel)}">с. ${esc(range)}</a>`;
-    });
-    return `<span class="src-citation"><span>${icon('book-open', 16)} ${esc(label)}</span>${anchors.join(' ')}</span>`;
+    const part = Number(lesson.volume || lesson.part || (lesson.group === 'systems' ? 2 : 1));
+    const ranges = String(lesson.pages || 1).split(/[,;]/).map(value => value.trim()).filter(Boolean);
+    const anchors = ranges.map(range => pageLink(part, firstPage(range), 'с. ' + range));
+    return `<span class="src-citation"><span>${icon('book-open', 16)} FCOM · том ${part}</span>${anchors.join(' ')}</span>`;
   }
 
   function chapters(doc) {
     const rows = doc.chapters.map(([title, page, group]) => {
-      const href = url({part: doc.part, pages: page});
-      const pageLabel = href
-        ? `<a class="src-page" href="${esc(href)}" target="_blank" rel="noopener" aria-label="Открыть PDF, страница ${page}">с. ${page}</a>`
-        : `<span class="src-page">с. ${page}</span>`;
       const titleLabel = group ? `<a href="#theory/${group}">${esc(title)}</a>` : esc(title);
-      return `<li><span>${titleLabel}</span>${pageLabel}</li>`;
+      return `<li><span>${titleLabel}</span>${pageLink(doc.part, page, 'с. ' + page)}</li>`;
     });
-    return `<details class="src-chapters"><summary>Содержание тома<span aria-hidden="true">⌄</span></summary>
-      <ol>${rows.join('')}</ol></details>`;
+    const leaves = doc.datedLeaves.map(([page, sheet, date]) => pageLink(doc.part, page, sheet + ' · ' + date)).join(', ');
+    return `<details class="src-chapters"><summary>Содержание и данные издания<span aria-hidden="true">⌄</span></summary>
+      <ol>${rows.join('')}</ol><p class="src-imprint">Обозначение D6-27370-8AS-UTR. Примеры дат на листах руководства — ${leaves}.</p></details>`;
   }
 
   function volumeCard(doc) {
-    const source = attached.get(doc.part);
-    const state = source ? (source.persistent ? 'Подключён в этом браузере' : 'Подключён до закрытия вкладки') : 'PDF не выбран';
+    const source = sourceFor(doc.part);
+    const state = source?.bundled ? 'PDF входит в ваш комплект'
+      : source ? (source.persistent ? 'Подключён в этом браузере' : 'Подключён до закрытия вкладки') : 'Для чтения понадобится ваш PDF';
+    const disconnect = source && !source.bundled ? `<button class="src-remove" type="button" data-src-remove="${doc.part}">Отключить</button>` : '';
     const action = source
-      ? `<a class="btn btn-secondary" href="${esc(source.url)}#page=1" target="_blank" rel="noopener">${icon('book-open', 16)} Открыть том</a>
-        <button class="src-remove" type="button" data-src-remove="${doc.part}">Отключить</button>`
-      : `<button class="btn btn-secondary" type="button" data-src-select="${doc.part}">${icon('book', 16)} Выбрать PDF</button>`;
+      ? `<a class="btn btn-secondary" href="${esc(pageUrl(doc.part, 1))}" target="_blank" rel="noopener">${icon('book-open', 16)} Открыть том</a>
+        ${disconnect}`
+      : `<button class="btn btn-secondary" type="button" data-src-select="${doc.part}">${icon('book', 16)} Выбрать PDF тома ${doc.part}</button>`;
     const currentNotice = notices.get(doc.part) || '';
+    const description = doc.part === 1 ? 'Части 01–04. Ограничения, нормальные и дополнительные процедуры, предполётные и полётные характеристики.'
+      : 'Части 05–08. Главы 1–15 об устройстве самолёта, индикации и работе его систем.';
     return `<article class="src-card" aria-labelledby="src-title-${doc.part}">
-      <header><span class="src-volume">ТОМ 0${doc.part}</span><span class="src-pages">${doc.pages.toLocaleString('ru-RU')} страниц</span></header>
+      <header><span class="src-volume">FCOM · Том ${doc.part}</span><span class="src-pages">${doc.pages.toLocaleString('ru-RU')} стр.</span></header>
       <h2 id="src-title-${doc.part}">${esc(doc.title)}</h2>
+      <p class="src-caption">${description}</p>
       <p class="src-status ${source ? 'src-ready' : ''}">${source ? icon('check', 16) : ''} ${state}</p>
       <div class="src-actions">${action}</div>
       <input hidden type="file" accept="application/pdf,.pdf" data-src-file="${doc.part}" aria-label="Выбрать PDF, том ${doc.part}">
-      <p class="src-notice" role="status" aria-live="polite" data-src-notice="${doc.part}">${esc(currentNotice)}</p>
+      <p class="src-notice" role="status" data-src-notice="${doc.part}">${esc(currentNotice)}</p>
       ${chapters(doc)}
-      <a class="src-module" href="#theory/${doc.part === 1 ? 'limits' : 'systems'}">${doc.part === 1 ? 'К урокам по ограничениям' : 'К урокам по системам'}</a>
       </article>`;
   }
 
+  function requestedPage() {
+    const match = /^#reference\/([12])\/(\d+)$/.exec(globalThis.location?.hash || '');
+    if (!match) return '';
+    const doc = entry(match[1]);
+    const page = Number(match[2]);
+    if (page < 1 || page > doc.pages) return '';
+    const href = pageUrl(doc.part, page);
+    const action = href
+      ? `<a class="btn btn-primary" href="${esc(href)}" target="_blank" rel="noopener">${icon('book-open', 16)} Открыть страницу ${page}</a>`
+      : `<button type="button" class="btn btn-primary" data-src-select="${doc.part}">${icon('book', 16)} Выбрать PDF тома ${doc.part}</button>`;
+    return `<section class="src-request" aria-label="Запрошенная страница">
+      <div><h2>Том ${doc.part} · страница ${page}</h2>
+      <p>${href ? 'Том подключён. Откройте нужное место в новой вкладке.' : 'Выберите файл этого тома. Здесь появится ссылка на нужную страницу.'}</p>
+      <p class="src-notice" role="status" data-src-target-notice="${doc.part}">${esc(notices.get(doc.part) || '')}</p></div>${action}
+      </section>`;
+  }
+
+  function faaUrl() {
+    if (faaLocalUrl) return faaLocalUrl;
+    const asset = window.flightdeckAsset?.(faaFile) || faaFile;
+    if (!asset.startsWith('data:')) return asset;
+    const data = atob(asset.slice(asset.indexOf(',') + 1));
+    const bytes = Uint8Array.from(data, char => char.charCodeAt(0));
+    faaLocalUrl = URL.createObjectURL(new Blob([bytes], {type: 'application/pdf'}));
+    return faaLocalUrl;
+  }
+
   function render() {
+    const isLocalKit = documents.every(doc => bundled(doc.part));
+    const intro = isLocalKit
+      ? 'Оба тома входят в комплект. В уроках и атласе нажмите на номер страницы, чтобы открыть её в PDF.'
+      : 'Уроки и атлас ссылаются на страницы двух русских томов FCOM. Выберите PDF на своём устройстве один раз, чтобы из темы сразу переходить к нужной странице.';
+    const batch = documents.every(doc => sourceFor(doc.part)) ? '' : `<div class="src-drop" data-src-drop>
+      <span><strong>Подключить файлы курса</strong><small>Перетащите сюда один или оба тома.</small></span>
+      <button type="button" class="btn btn-secondary" data-src-batch>Выбрать PDF</button>
+      <input hidden type="file" multiple accept="application/pdf,.pdf" data-src-files aria-label="Выбрать один или оба тома">
+      </div>`;
     return `<section class="src-view" aria-labelledby="src-heading">
-      <div class="page-heading"><h1 id="src-heading">Справочник FCOM</h1>
-      <p>Кабина и весь курс доступны сразу. Подключите свои PDF, если хотите открывать страницы руководства прямо из уроков. Файлы обрабатываются на вашем устройстве.</p></div>
+      <div class="page-heading"><h1 id="src-heading">Документы и источники</h1>
+      <p>${intro}</p></div>
+      ${requestedPage()}
+      ${batch}<p class="src-batch-status" role="status" data-src-batch-status>${esc(batchStatus)}</p>
       <div class="src-books">${documents.map(volumeCard).join('')}</div>
-      <section class="src-edition"><div class="src-edition-icon">${icon('book-open', 21)}</div>
-        <div><h2>Об издании</h2><p><b>737 Flight Crew Operations Manual</b> · D6-27370-8AS-UTR. Уроки ссылаются на порядковые страницы двух PDF русского перевода. Название файла можно менять.</p>
-        <p>На титульных страницах указано, что перевод выполнен с помощью ИИ. Тренажёр предназначен для самостоятельного изучения. Для лётной работы используют актуальные утверждённые документы эксплуатанта.</p></div></section>
-      <section class="src-edition"><div class="src-edition-icon">${icon('eye', 21)}</div>
-        <div><h2>Фотографии кабины</h2>
-        <p>Передняя панель Boeing 737-800, борт VT-JBE авиакомпании Jet Airways. Автор: Kurush Pawar. <a href="https://commons.wikimedia.org/wiki/File:VT-JBE_%288050804061%29.jpg" target="_blank" rel="noopener">VT-JBE</a></p>
-        <p>Потолочная панель Boeing 737 NG в Домодедово. Автор: Artem Katranzhi. <a href="https://commons.wikimedia.org/wiki/File:Domodedovo_IMG_2473_%288062172282%29.jpg" target="_blank" rel="noopener">Domodedovo IMG 2473</a></p>
-        <p>Оба снимка уменьшены и переведены в WebP. Разметка приборов наложена в интерфейсе. Фотографии и их адаптации доступны по лицензии <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>.</p></div></section>
+      <div class="src-publications">
+        <section class="src-edition"><div class="src-edition-icon">${icon('book-open', 21)}</div>
+          <div><h2>Руководство Boeing</h2><p><strong>737 Flight Crew Operations Manual · D6-27370-8AS-UTR.</strong> Это обозначение на титульных страницах обоих томов. Перевод выполнен с помощью ИИ. На титуле указан приоритет английского оригинала. Даты в выходных данных относятся к отдельным листам. Ссылки в курсе ведут на порядковые страницы русского PDF.</p>
+          <p>Англоязычный FCOM распространяется Boeing по лицензии. Для полётов применяется действующая документация эксплуатанта. ${isLocalKit ? 'В вашем комплекте оба PDF доступны без интернета.' : 'Выбранные здесь файлы хранятся в вашем браузере.'}</p>
+          <div class="src-doc-links"><a href="${boeingManuals}" target="_blank" rel="noopener">Доступ к FCOM у Boeing ${icon('corner', 12)}</a>
+          <a href="https://services.boeing.com/operations/myboeingfleet-portal" target="_blank" rel="noopener">MyBoeingFleet для эксплуатантов ${icon('corner', 12)}</a></div></div></section>
+        <section class="src-edition"><div class="src-edition-icon">${icon('book', 21)}</div>
+          <div><h2>Процедуры и взаимодействие экипажа</h2><p><strong>FAA AC 120-71B.</strong> Циркуляр FAA о стандартных процедурах и обязанностях пилота, контролирующего полёт. Дополнительный материал к курсу. На английском языке, 10 января 2017 года, 34 страницы.</p>
+          <div class="src-doc-links"><a class="btn btn-secondary" href="${esc(faaUrl())}" target="_blank" rel="noopener">${icon('book-open', 16)} Открыть PDF</a>
+          <a href="${faaCatalog}" target="_blank" rel="noopener">Карточка FAA ${icon('corner', 12)}</a><a href="${faaOriginal}" target="_blank" rel="noopener">PDF на faa.gov ${icon('corner', 12)}</a></div></div></section>
+      </div>
+      <details class="src-credits"><summary>Фотографии кабины</summary>
+        <p>Передняя панель Boeing 737-800, борт VT-JBE авиакомпании Jet Airways. Фото Kurush Pawar. <a href="https://commons.wikimedia.org/wiki/File:VT-JBE_%288050804061%29.jpg" target="_blank" rel="noopener">Оригинал ${icon('corner', 12)}</a></p>
+        <p>Потолочная панель Boeing 737 NG в Домодедове. Фото Artem Katranzhi. <a href="https://commons.wikimedia.org/wiki/File:Domodedovo_IMG_2473_%288062172282%29.jpg" target="_blank" rel="noopener">Оригинал ${icon('corner', 12)}</a></p>
+        <p>Оба снимка уменьшены и переведены в WebP. Разметка наложена в интерфейсе. Фотографии и адаптации распространяются по лицензии <a href="https://creativecommons.org/licenses/by-sa/2.0/" target="_blank" rel="noopener">CC BY-SA 2.0</a>.</p></details>
       </section>`;
   }
 
@@ -161,6 +239,8 @@
     notices.set(part, value);
     const target = document.querySelector('[data-src-notice="' + part + '"]');
     if (target) target.textContent = value;
+    const requested = document.querySelector('[data-src-target-notice="' + part + '"]');
+    if (requested) requested.textContent = value;
   }
 
   function refreshView() {
@@ -197,6 +277,9 @@
       notices.delete(part);
       refreshView();
       onChange();
+      const target = document.querySelector('.src-request a.btn');
+      if (target) target.focus?.({preventScroll: true});
+      return true;
     } catch {
       message(part, 'Браузер не смог прочитать PDF. Выберите файл ещё раз.');
     }
@@ -212,7 +295,35 @@
     URL.revokeObjectURL(source.url);
     attached.delete(part);
     notices.delete(part);
+    setBatchStatus('');
     refreshView();
+  }
+
+  function setBatchStatus(value) {
+    batchStatus = value;
+    const status = document.querySelector('[data-src-batch-status]');
+    if (status) status.textContent = value;
+  }
+
+  async function pairBatch(files) {
+    if (!files.length) return;
+    setBatchStatus('Проверяем выбранные PDF…');
+    const selected = new Set();
+    let hasUnknown = false;
+    const result = [];
+    for (const file of files) {
+      const doc = documents.find(item => item.size === file.size);
+      if (!doc) { hasUnknown = true; continue; }
+      if (selected.has(doc.part)) continue;
+      if (await pair(doc.part, file)) {
+        selected.add(doc.part);
+        result.push('Том ' + doc.part + ' подключён.');
+      } else {
+        result.push('Не удалось подключить том ' + doc.part + '. Проверьте сообщение в его карточке.');
+      }
+    }
+    if (hasUnknown) result.push('Распознать все выбранные файлы не удалось. Выберите исходные PDF русского перевода.');
+    setBatchStatus(result.join(' '));
   }
 
   function bind() {
@@ -222,17 +333,41 @@
     view.addEventListener('click', event => {
       const select = event.target.closest('[data-src-select]');
       const disconnect = event.target.closest('[data-src-remove]');
+      if (event.target.closest('[data-src-batch]')) view.querySelector('[data-src-files]').click();
       if (select) view.querySelector('[data-src-file="' + select.dataset.srcSelect + '"]').click();
       if (disconnect) remove(Number(disconnect.dataset.srcRemove));
     });
     view.addEventListener('change', event => {
-      const input = event.target.closest('[data-src-file]');
-      if (!input) return;
-      const file = input.files[0];
-      input.value = '';
-      pair(Number(input.dataset.srcFile), file);
+      const input = event.target;
+      const field = input.closest('[data-src-file], [data-src-files]');
+      if (!field) return;
+      const files = Array.from(field.files || []);
+      field.value = '';
+      if (field.dataset.srcFile) {
+        setBatchStatus('');
+        pair(Number(field.dataset.srcFile), files[0]);
+      } else {
+        pairBatch(files);
+      }
     });
+    const drop = view.querySelector?.('[data-src-drop]');
+    if (drop) {
+      drop.addEventListener('dragover', event => {
+        if (!Array.from(event.dataTransfer.types).includes('Files')) return;
+        event.preventDefault();
+        event.dataTransfer.dropEffect = 'copy';
+        drop.classList.add('src-dragging');
+      });
+      drop.addEventListener('dragleave', event => {
+        if (!drop.contains(event.relatedTarget)) drop.classList.remove('src-dragging');
+      });
+      drop.addEventListener('drop', event => {
+        event.preventDefault();
+        drop.classList.remove('src-dragging');
+        pairBatch(Array.from(event.dataTransfer.files));
+      });
+    }
   }
 
-  window.SourceDocs = {link, url, render, bind, init};
+  window.SourceDocs = {link, url, pageLink, pageUrl, render, bind, init};
 })();

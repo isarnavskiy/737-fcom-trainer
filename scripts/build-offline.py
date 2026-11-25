@@ -40,7 +40,7 @@ def asset_type(path):
 
 def data_uri(path):
     mime = asset_type(path)
-    if not mime or not mime.startswith(("image/", "font/", "audio/")):
+    if not mime or not (mime.startswith(("image/", "font/", "audio/")) or mime == "application/pdf"):
         raise ValueError(f"Unsupported offline asset type: {path.name}")
     return f"data:{mime};base64,{base64.b64encode(path.read_bytes()).decode('ascii')}"
 
@@ -64,6 +64,9 @@ class OfflinePage(HTMLParser):
         for path in sorted((ROOT / "assets").rglob("*")):
             if path.is_file() and (asset_type(path) or "").startswith(("image/", "font/", "audio/")):
                 self.assets[path.relative_to(ROOT).as_posix()] = data_uri(path)
+
+        for path in sorted((ROOT / "docs").glob("*.pdf")):
+            self.assets[path.relative_to(ROOT).as_posix()] = data_uri(path)
 
     def stylesheet(self, path):
         css = path.read_text(encoding="utf-8")

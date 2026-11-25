@@ -10,6 +10,50 @@
     {id:'electric-meter', station:'oh-elec', title:'Измерить частоту генератора', find:'На верхней панели найдите приборы измерения AC и DC.', action:'Выберите источник GEN 2 правым селектором измерительных приборов AC. Введите частоту, которая появится в окне CPS FREQ.', explanation:'Селектор измерительных приборов выбирает источник для частотомера и измерителей переменного тока. В этом задании для GEN 2 частота равна 402 Гц, напряжение 116 В.',pages:'306, 308–310'}
   ];
 
+  // Photographic coordinates refer to the original WebP in pixels. Target boxes are local to the crop.
+  const observations = [
+    {id:'cdu-correct', station:'cdu', title:'Исправить запись в CDU', find:'Найдите левый пульт CDU на центральной консоли.',
+      action:'В строке ввода уже набрано 738. Исправьте последнюю цифру так, чтобы в строке осталось 737. Используйте клавиши на пульте.',
+      explanation:'Короткое нажатие CLR стирает последний символ. Клавиша 7 добавляет цифру в конец строки ввода. Запись остаётся в этой строке до следующего действия.',
+      pages:'823, 826, 831–832', kind:'cdu', instrument:'Строка ввода CDU'},
+    {id:'window-glass', station:'oh-window', title:'Найти обогрев правого переднего стекла', find:'Найдите группу переключателей обогрева стёкол.',
+      action:'Выберите на снимке переключатель правого переднего стекла. Сначала найдите обозначение стороны, затем положение стекла.',
+      explanation:'В группе R надпись FWD относится к переднему стеклу, SIDE — к боковому. Между левой и правой группами расположен переключатель проверки.',
+      pages:'169–170', kind:'photo', instrument:'WINDOW HEAT', crop:[1120,235,500,215], answer:'rf',
+      points:[['ls','L · SIDE',80,163,55,54],['lf','L · FWD',155,163,55,54],['test','Проверка',242,155,55,54],['rf','R · FWD',325,166,55,54],['rs','R · SIDE',400,166,55,54]],
+      hint:'Найдите букву R над двумя правыми переключателями. Из этой пары выберите FWD.'},
+    {id:'duct-pressure', station:'oh-duct', title:'Прочитать две стрелки манометра', find:'На потолочной панели найдите круглый указатель DUCT PRESS.',
+      action:'Считайте давление для левой и правой воздушных магистралей. Ориентируйтесь по буквам на стрелках. Обе используют одну шкалу в PSI.',
+      explanation:'Стрелка L указывает 20 PSI, стрелка R — 40 PSI. Буквы на стрелках обозначают магистраль, поэтому показания можно читать даже при разной ориентации стрелок.',
+      pages:'137–138', kind:'dial', instrument:'Указатель давления в магистралях'},
+    {id:'press-flight', station:'oh-alt', title:'Считать крейсерскую высоту', find:'Найдите окно FLT ALT на панели управления наддувом.',
+      action:'Прочитайте значение FLT ALT на увеличенной фотографии. Впишите высоту в футах.',
+      explanation:'В верхнем окне фотографии видно 37 000 ft. FLT ALT показывает выбранную крейсерскую высоту. Нижнее окно LAND ALT относится к высоте аэродрома посадки.',
+      pages:'144–145', kind:'number', instrument:'Панель наддува кабины', crop:[1410,1235,323,225], answer:37000, field:'Крейсерская высота, ft',hint:'Найдите пять янтарных цифр в верхнем окне над надписью FLT ALT.'},
+    {id:'fuel-pump', station:'oh-fuel', title:'Различить насосы основного бака',find:'Найдите группу переключателей топливных насосов на потолочной панели.',
+      action:'Укажите передний насос основного бака № 2. Сверьте обозначение бака и ориентацию FWD или AFT. Можно выбрать метку на фотографии или её подпись ниже.',
+      explanation:'Основному баку № 2 соответствует правая пара нижних переключателей. В этой паре передний насос обозначен FWD, задний — AFT.',
+      pages:'1291–1292', kind:'photo', instrument:'Топливные насосы', crop:[325,1295,365,210], answer:'2f',
+      points:[['cl','CTR · L',146,68,39,39],['cr','CTR · R',202,68,39,39],['1a','1 · AFT',107,146,39,40],['1f','1 · FWD',164,147,39,40],['2f','2 · FWD',250,149,39,40],['2a','2 · AFT',304,150,39,40]],hint:'Ищите правую пару в нижнем ряду. Передний насос находится ближе к середине панели.'},
+    {id:'equip-exhaust', station:'oh-cooling', title:'Различить подачу и вытяжку',find:'Найдите секцию EQUIP COOLING с двумя переключателями.',
+      action:'Укажите переключатель, относящийся к вытяжному вентилятору охлаждения оборудования. Прочитайте названия над обоими переключателями.',
+      explanation:'Правый переключатель EXHAUST относится к вытяжному вентилятору. Левый, SUPPLY, относится к вентилятору подачи. У каждого есть своё табло OFF.',
+      pages:'142', kind:'photo', instrument:'Охлаждение оборудования',crop:[949,895,201,166],answer:'exhaust',
+      points:[['supply','SUPPLY',54,72,45,43],['exhaust','EXHAUST',136,72,45,43]],hint:'SUPPLY обозначает подачу воздуха. За вытяжку отвечает EXHAUST.'},
+    {id:'temperature-zone', station:'oh-temperature', title:'Выбрать зону регулирования температуры',find:'Найдите три селектора зональной температуры рядом друг с другом.',
+      action:'Выберите селектор задней части пассажирского салона. Найдите нужную зону среди CONT CAB, FWD CAB и AFT CAB.',
+      explanation:'AFT CAB относится к задней зоне салона. FWD CAB обозначает переднюю зону салона, а CONT CAB — кабину экипажа. Каждой зоне соответствует свой селектор.',
+      pages:'139–140, 157',kind:'photo',instrument:'Селекторы температуры',crop:[1529,602,395,201],answer:'aft',
+      points:[['cont','CONT CAB',91,132,74,74],['fwd','FWD CAB',211,132,74,74],['aft','AFT CAB',324,132,74,74]],hint:'Надпись AFT CAB находится над правой ручкой. AFT обозначает заднюю часть самолёта.'},
+    {id:'standby-position', station:'isfd', title:'Узнать резервный пилотажный индикатор',find:'Найдите блок резервных приборов между навигационным и центральным дисплеями.',
+      action:'Рассмотрите оба прибора. Укажите интегрированный резервный индикатор, который показывает положение самолёта, скорость и высоту.',
+      explanation:'ISFD находится сверху. На его цветном экране заметна граница неба и земли. Под ним расположен круглый резервный радиомагнитный индикатор со стрелками.',
+      pages:'643–644, 647',kind:'photo',instrument:'Блок резервных приборов',deck:'front',crop:[885,795,168,280],answer:'isfd',
+      points:[['isfd','Верхний экран',76,81,70,74],['rmi','Нижний циферблат',78,190,78,72]],hint:'Ищите границу голубой и коричневой частей изображения. Она есть на верхнем экране.'}
+  ];
+  exercises.push(...observations);
+  const observation = id => observations.find(item=>item.id===id);
+
   const ranges = [5,10,20,40,80,160,320,640];
   const rangeAngles = [-90,-62,-31,0,31,62,90,113];
   const sources = [
@@ -19,7 +63,7 @@
   ];
   const initial = id => ({
     misses:0, error:false,
-    ...(id==='mcp-heading' ? {heading:358} : id==='nd-range' ? {rangeIndex:1} : id==='eng-compare' ? {chosen:''} : id==='electric-meter' ? {sourceIndex:0,frequency:''} : {speed:'',altitude:''})
+    ...(observation(id) ? {chosen:'',left:'',right:'',reading:'',scratchpad:'738'} : id==='mcp-heading' ? {heading:358} : id==='nd-range' ? {rangeIndex:1} : id==='eng-compare' ? {chosen:''} : id==='electric-meter' ? {sourceIndex:0,frequency:''} : {speed:'',altitude:''})
   });
   const angle = (x,y,r,deg) => {
     const rad=deg*Math.PI/180;
@@ -149,9 +193,114 @@
       '<div class="cp-meter-select">'+dial+'</div><span class="cp-units">AC</span></div><div class="cp-turnkeys"><button type="button" data-cp-turn="-1" aria-label="Предыдущий источник">−</button><output aria-live="polite">'+selected.name+'</output><button type="button" data-cp-turn="1" aria-label="Следующий источник">+</button></div></div>';
   }
 
+  function observationPhoto(ex, state) {
+    const front=ex.deck==='front', width=front?2304:2160;
+    const [left,top,w,h]=ex.crop;
+    const source='assets/cockpit-'+(front?'overview':'overhead')+'.webp';
+    const photo=(window.flightdeckAsset || (p=>p))(source);
+    const points=ex.points || [];
+    const description=ex.kind==='number'?'Панель наддува. В окне FLT ALT видны цифры 3, 7, 0, 0, 0.':ex.instrument+' крупным планом';
+    const markers=points.map(([value,name,x,y,mw,mh],i)=>
+      '<button type="button" class="cp-part-marker" data-cp-part="'+value+'" aria-pressed="'+(state.chosen===value)+'" aria-label="'+(i+1)+'. '+name+'" style="left:'+x/w*100+'%;top:'+y/h*100+'%;width:'+mw/w*100+'%;height:'+mh/h*100+'%"><span>'+(i+1)+'</span></button>').join('');
+    const legend=points.length?'<div class="cp-part-legend" role="group" aria-label="Элементы на снимке">'+points.map(([value,name],i)=>
+      '<button type="button" data-cp-part="'+value+'" aria-pressed="'+(state.chosen===value)+'"><b>'+(i+1)+'</b>'+name+'</button>').join('')+'</div>':'';
+    return '<div class="cp-observation"><div class="cp-detail-photo" style="aspect-ratio:'+w+'/'+h+';max-width:'+Math.min(580,Math.round(360*w/h))+'px">'+
+      '<img src="'+photo+'" alt="'+description+'" draggable="false" style="width:'+width/w*100+'%;left:'+(-left/w*100)+'%;top:'+(-top/h*100)+'%">'+markers+'</div>'+legend+'</div>';
+  }
+
+  // The duct gauge has one clockwise scale, two labelled hands and no separate readout.
+  function ductGauge() {
+    const cx=145,cy=145, degrees=value=>54+3.15*value;
+    let face='<circle cx="145" cy="145" r="138" fill="#454b50" stroke="#15181c" stroke-width="6"/><circle cx="145" cy="145" r="126" fill="#101318" stroke="#858a8b" stroke-width="2"/>';
+    face+='<path d="'+arc(cx,cy,98,degrees(0),degrees(90))+'" stroke="#e9e6d9" stroke-width="2" fill="none"/>';
+    for(let value=0;value<=90;value+=5){
+      const a=degrees(value);
+      face+=line(angle(cx,cy,98,a),angle(cx,cy,value%10===0?116:109,a),'#edecdf',value%10===0?3:2);
+      if(value%20===0){
+        const [x,y]=angle(cx,cy,80,value===20||value===40?a+9:a);face+=label(x,y+5,value,16,'#f5f3e8');
+      }
+    }
+    face+=label(207,134,'DUCT',12)+label(207,149,'PRESS',12)+label(207,164,'PSI',12);
+    function hand(value,side) {
+      const a=degrees(value);
+      const l=angle(cx,cy,15,a+90),r=angle(cx,cy,15,a-90),tip=angle(cx,cy,101,a),[x,y]=angle(cx,cy,44,a);
+      return '<polygon points="'+[point(l),point(tip),point(r)].join(' ')+'" fill="#eeeadd" stroke="#373a39" stroke-width="1.2"/>'+label(x,y+4,side,13,'#171c1e','middle','font-weight="bold"');
+    }
+    face+=hand(40,'R')+hand(20,'L')+'<circle cx="145" cy="145" r="17" fill="#25292b" stroke="#d4d4ca" stroke-width="2"/>';
+    return '<div class="cp-duct-gauge">'+svg('0 0 290 290','Манометр DUCT PRESS. Стрелка L совпадает с первой отметкой в двадцать PSI после нуля, R — со второй.',face)+'</div>';
+  }
+
+  function cduPad(state) {
+    const key=(value,word=value)=>'<button type="button" data-cp-entry="'+value+'" aria-label="'+(value==='CLR'?'CLR, стереть последний символ':word)+'">'+word+'</button>';
+    return '<div class="cp-cdu-unit">'+screws+'<div class="cp-cdu-display"><span>CDU</span><div class="cp-cdu-line"><output data-cp-scratch aria-label="Строка ввода" aria-live="polite">'+state.scratchpad+'</output></div></div>'+
+      '<div class="cp-cdu-keys" role="group" aria-label="Цифровые клавиши CDU">'+Array.from('123456789').map(ch=>key(ch)).join('')+'<i></i>'+key('0')+key('CLR')+'</div></div>';
+  }
+
+  function observationFields(ex) {
+    if(ex.kind==='dial')return [['left','Левая магистраль, PSI'],['right','Правая магистраль, PSI']];
+    return ex.kind==='number'?[['reading',ex.field]]:[];
+  }
+
+  function observationError(ex,state) {
+    if(ex.kind==='cdu')return 'Сравните запись с заданием. Для исправления одной цифры нажмите CLR один раз, затем введите нужную цифру.';
+    if(ex.kind==='dial')return normalize(state.left)!==20?'Найдите букву L на стрелке и проследите за её остриём до деления.':'Прочитайте деление, на которое указывает остриё стрелки R.';
+    return ex.hint;
+  }
+
+  function renderObservation(ex,state) {
+    const instrument=ex.kind==='cdu'?cduPad(state):ex.kind==='dial'?ductGauge():observationPhoto(ex,state);
+    const fields=observationFields(ex).map(([field,title])=>'<label>'+title+'<input name="cp-'+field+'" inputmode="numeric" type="text" maxlength="8" autocomplete="off" value="'+state[field]+'" required></label>').join('');
+    const caption=ex.crop?'Фотография кабины':'Учебный фрагмент';
+    return '<section class="cp-panel" data-cp-panel="'+ex.id+'" aria-label="'+ex.instrument+'"><header class="cp-caption"><span>'+ex.instrument+'</span><small>'+caption+'</small></header>'+
+      '<form class="cp-form"><div class="cp-instrument">'+instrument+'</div>'+(fields?'<div class="cp-fields">'+fields+'</div>':'')+
+      feedback(state.error?observationError(ex,state):'')+check(ex.kind==='photo'?'Проверить выбор':ex.kind==='cdu'?'Проверить запись':'Проверить показания')+'</form></section>';
+  }
+
+  function bindObservation(panel,ex,state,onState,onComplete) {
+    const form=panel.querySelector('form'), feedbackNode=panel.querySelector('.cp-feedback');
+    function changed() {
+      state.error=false;feedbackNode.textContent='';onState?.({...state});
+    }
+    const parts=panel.querySelectorAll('[data-cp-part]');
+    parts.forEach(btn=>btn.addEventListener('click',()=>{
+      state.chosen=btn.dataset.cpPart;
+      parts.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.cpPart===state.chosen)));
+      changed();
+    }));
+    panel.querySelectorAll('[data-cp-entry]').forEach(btn=>btn.addEventListener('click',()=>{
+      const entry=btn.dataset.cpEntry;
+      state.scratchpad=entry==='CLR'?state.scratchpad.slice(0,-1):(state.scratchpad+entry).slice(0,8);
+      panel.querySelector('[data-cp-scratch]').textContent=state.scratchpad;
+      changed();
+    }));
+    for(const [field] of observationFields(ex)){
+      const input=form.elements['cp-'+field];
+      input.addEventListener('input',()=>{state[field]=numberText(input.value);changed();});
+    }
+    form.addEventListener('submit',event=>{
+      event.preventDefault();
+      for(const [field] of observationFields(ex))state[field]=numberText(form.elements['cp-'+field].value);
+      let done;
+      switch(ex.kind){
+        case 'cdu': done=state.scratchpad==='737'; break;
+        case 'dial': done=normalize(state.left)===20&&normalize(state.right)===40; break;
+        case 'number': done=normalize(state.reading)===ex.answer;break;
+        default: done=state.chosen===ex.answer;
+      }
+      if(done){changed();onComplete?.({...state});return;}
+      state.error=true;state.misses++;feedbackNode.textContent=observationError(ex,state);onState?.({...state});
+    });
+  }
+
   function getState(id,raw){
     const s=Object.assign(initial(id),raw||{});
     s.misses=Math.max(0,parseInt(s.misses,10)||0);
+    const ex=observation(id);
+    if(ex){
+      for(const [field] of observationFields(ex))s[field]=numberText(s[field]);
+      s.scratchpad=String(s.scratchpad??'738').replace(/[^0-9]/g,'').slice(0,8);
+      if(!ex.points?.some(([value])=>value===s.chosen))s.chosen='';
+    }
     if(id==='electric-meter'){s.sourceIndex=Math.min(2,Math.max(0,Math.trunc(Number(s.sourceIndex))||0));s.frequency=numberText(s.frequency);}
     if(id==='nd-range')s.rangeIndex=Math.max(0,Math.min(ranges.length-1,Math.trunc(Number(s.rangeIndex))||0));
     if(id==='mcp-heading')s.heading=((Math.trunc(Number(s.heading))||0)%360+360)%360;
@@ -163,6 +312,7 @@
   function render(id,raw){
     if(!exercises.some(ex=>ex.id===id))return '';
     const s=getState(id,raw);
+    const ex=observation(id);if(ex)return renderObservation(ex,s);
     const title={ 'pfd-read':'Основной пилотажный дисплей', 'nd-range':'Экран карты и селектор EFIS', 'mcp-heading':'Секция курса MCP','eng-compare':'Верхний дисплей двигателей', 'electric-meter':'Панель измерительных приборов AC/DC'}[id];
     let instrument='',inputs='',error='';
     if(id==='pfd-read'){
@@ -190,6 +340,7 @@
     const panel=host.matches?.('[data-cp-panel]')?host:host.querySelector('[data-cp-panel]');
     if(!panel||panel.dataset.cpPanel!==id)return;
     const state=getState(id,raw);
+    const ex=observation(id);if(ex){bindObservation(panel,ex,state,onState,onComplete);return;}
     const form=panel.querySelector('form');
     const notify=()=>onState?.({...state});
     const redraw=focus=>{

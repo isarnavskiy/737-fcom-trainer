@@ -112,3 +112,16 @@
 .cp-viewport.is-panning,.cp-viewport.is-panning *{cursor:grabbing;user-select:none}
 /* The photograph can grow independently of the viewport when it is zoomed. */
 .cp-film{position:absolute;inset:0 auto auto 0}
+.cp-related{display:grid;gap:10px;min-width:0;border-top:1px solid var(--line,#596065);padding-top:13px}
+.cp-doc-links{min-width:0;font-size:12px;line-height:1.5}
+.cp-doc-links a{overflow-wrap:anywhere;text-underline-offset:3px}
+.cp-doc-links .ll-ref{display:inline-flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:12px;min-height:25px}
+.cp-related a:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+@media(max-width:700px){.cp-related{grid-column:1/-1}.cp-brief .cp-related{display:flex;align-items:baseline;flex-wrap:wrap;gap:6px 14px}}
+.cp-jump-detail{display:none}
+@media(max-width:700px){.cp-photo-foot .cp-jump-detail{display:inline-flex;align-items:center;gap:5px;color:var(--teal,#126355);background:transparent;border:0;padding:4px 0;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}}
+.cp-return-photo{display:none}
+@media(max-width:700px){#cp-instrument-name,.cp-photo-card{scroll-margin-top:80px}.cp-info .cp-return-photo{display:inline-flex;justify-self:start;align-self:start;background:transparent;border:0;padding:4px 0;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}}
+.cp-open-crop{display:block;width:100%;padding:0;cursor:zoom-in;align-self:stretch}
+.cp-open-crop>span{display:inline-flex;align-items:center;gap:5px;position:absolute;bottom:7px;right:7px;z-index:1;padding:4px 7px;border-radius:5px;color:#fff;background:#111b1fd9;font-size:11px}
+.cp-open-crop:focus-visible{outline:2px solid currentColor;outline-offset:3px}

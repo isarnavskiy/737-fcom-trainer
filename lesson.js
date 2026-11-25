@@ -232,11 +232,7 @@
 
   function theory(lesson) {
     const hasRead = api().progress().read.includes(lesson.id);
-    const relatedPanels = {
-      'sys-efis-altitude':'pfd-read', 'limits-rvsm':'pfd-read', 'normal-fma':'mcp-heading',
-      'systems-fma-modes':'mcp-heading', 'sys-engine-rotors':'eng-compare', 'sys-power-conversion':'electric-meter'
-    };
-    const panel = window.CockpitPanels.exercises.find(item => item.id === relatedPanels[lesson.id]);
+    const panels = window.Cockpit.exercisesForLesson(lesson.id);
     return `<div class="ll-study-grid">
       <div class="ll-content">
         <section class="ll-card ll-reading" aria-labelledby="ll-theory-heading"><h2 id="ll-theory-heading">${icon('book')} Разбор темы</h2>
@@ -246,9 +242,17 @@
       <section class="ll-card ll-next"><h2>${icon('target')} Проверить себя</h2>
       <h3>${esc(lesson.scenario.title)}</h3><p>${esc(lesson.scenario.context)}</p>
       <a class="btn btn-primary" href="${route('practice', lesson)}">${icon('play', 17)} Открыть сценарий</a>
-      ${panel ? `<a class="ll-cockpit-link" href="#cockpit/${panel.id}">${icon('gauge', 17)} В кабину · ${esc(panel.title)}</a>` : ''}</section></div>
-      </div>${lesson.id === 'limits-rvsm' ? altimeterLab() : ''}${lesson.id === 'systems-radio-audio' ? radioLab() : ''}<div class="ll-read-row"><p>${icon('book', 16)} ${esc(sourceLabel(lesson))}</p>
+      ${panels.map(panel => `<a class="ll-cockpit-link" href="#cockpit/${panel.id}">${icon('gauge', 17)} В кабину · ${esc(panel.title)}</a>`).join('')}</section></div>
+      </div>${lesson.id === 'limits-rvsm' ? altimeterLab() : ''}${lesson.id === 'systems-radio-audio' ? radioLab() : ''}<div class="ll-read-row"><p>${icon('book', 16)} ${api().sourceLink(lesson)}</p>
       <button class="btn btn-secondary ll-read" type="button" data-ll-read ${hasRead ? 'disabled' : ''}>${icon('check', 17)} ${hasRead ? 'Урок изучен' : 'Отметить как изученный'}</button></div>`;
+  }
+
+  function answerExplanation(lesson, step) {
+    if (!step.page) return esc(step.why);
+    const volume = lesson.volume || lesson.part || 1;
+    const text = step.why.replace(/ Том \d+, с\. \d+\.$/, '');
+    const source = window.SourceDocs.pageLink(volume, step.page, 'Том ' + volume + ', с. ' + step.page);
+    return esc(text) + ' ' + source;
   }
 
   function startRun(steps) {
@@ -298,7 +302,7 @@
           return `<label class="ll-option ${result || ''}"><input type="radio" name="ll-answer" value="${i}" ${checked ? 'checked' : ''} ${run.checked ? 'disabled' : ''} required><span>${esc(option)}</span>
             ${result ? `<span class="ll-answer-state">${i === current.answer ? icon('check', 16) + ' Верный ответ' : icon('close', 16) + ' Ваш ответ'}</span>` : ''}</label>`;
         }).join('')}</div></fieldset>
-        ${run.checked ? `<div class="ll-feedback ${correct ? 'll-correct' : 'll-incorrect'}" id="ll-feedback" tabindex="-1"><h3>${icon(correct ? 'check' : 'info')} ${correct ? 'Верно' : 'Разбор ответа'}</h3><p>${esc(current.why)}</p></div>` : ''}
+        ${run.checked ? `<div class="ll-feedback ${correct ? 'll-correct' : 'll-incorrect'}" id="ll-feedback" tabindex="-1"><h3>${icon(correct ? 'check' : 'info')} ${correct ? 'Верно' : 'Разбор ответа'}</h3><p>${answerExplanation(lesson, current)}</p></div>` : ''}
         <div class="ll-submit-row"><button class="btn btn-primary" type="submit" ${picked === null ? 'disabled' : ''}>${run.checked ? (run.index === steps.length - 1 ? 'Посмотреть результат' : 'Следующий шаг') : 'Проверить ответ'}</button></div>
       </form></section>`;
   }
@@ -321,7 +325,7 @@
       <p>${indices.length ? `К повторению: ${indices.length} ${declension(indices.length, 'вопрос', 'вопроса', 'вопросов')}.` : 'Результат сохранён в вашем прогрессе.'}</p></div>
       </div>
       ${indices.length ? `<details class="ll-review" open><summary>Разбор ошибок</summary>
-        ${indices.map(i => `<article><small>Шаг ${i + 1}</small><h3>${esc(steps[i].question)}</h3><strong>${icon('check', 15)} ${esc(steps[i].options[steps[i].answer])}</strong><p>${esc(steps[i].why)}</p></article>`).join('')}</details>` : ''}
+        ${indices.map(i => `<article><small>Шаг ${i + 1}</small><h3>${esc(steps[i].question)}</h3><strong>${icon('check', 15)} ${esc(steps[i].options[steps[i].answer])}</strong><p>${answerExplanation(lesson, steps[i])}</p></article>`).join('')}</details>` : ''}
       <div class="ll-result-actions"><button class="btn btn-primary" type="button" data-ll-restart>${icon('reload', 17)} Пройти ещё раз</button>
       <a class="btn btn-secondary" href="${route('lesson', lesson)}">${icon('book', 17)} Повторить теорию</a><a class="ll-ref" href="#progress">Мой прогресс</a></div>
       </section>`;

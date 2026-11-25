@@ -32,3 +32,23 @@
 @media(prefers-reduced-motion:no-preference){.cp-value,.cp-turnkeys button{transition:background .12s,outline-color .12s}}
 
 .cp-meter-labels{width:88%;display:grid;grid-template-columns:repeat(3,1fr);gap:0;color:#f1eee0;letter-spacing:.03em;font:650 11px/1.5 "Arial Narrow",Arial,sans-serif}.cp-meter-labels span{text-align:center}.cp-meter .cp-glass{margin:2px 0}.cp-meter-select .cp-knob:before{inset:3px;border-radius:9px;transform:rotate(-39deg)}.cp-meter-select .cp-knob i:before{height:17px;top:4px}
+
+.cp-observation{display:grid;justify-items:center;gap:15px;width:100%;min-width:0}
+.cp-detail-photo{width:100%;position:relative;overflow:hidden;border-radius:8px;background:#12191c;box-shadow:0 0 0 1px #515c62,0 6px 18px #0006}
+.cp-detail-photo img{display:block;max-width:none!important;position:absolute;height:auto!important;user-select:none;pointer-events:none}
+.cp-part-marker{position:absolute;display:grid;place-items:end start;transform:translate(-50%,-50%);padding:0;border:1.5px solid #ffdeae;border-radius:24%;color:#fffcef;background:transparent;box-shadow:0 0 0 1px #172125a3;cursor:pointer}
+.cp-part-marker span{display:grid;place-items:center;position:absolute;left:-3px;bottom:-4px;border-radius:50%;width:18px;height:18px;font:700 11px/1 var(--mono,monospace);background:#22282b;border:1px solid #f5d7b4}
+.cp-part-marker:is(:hover,:focus-visible,[aria-pressed=true]){border-color:#ffb774;box-shadow:0 0 0 2px #ffb774;background:#ffb26c24}
+.cp-part-legend{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.cp-part-legend button{display:inline-flex;align-items:center;gap:6px;min-height:36px;border:1px solid #56656a;padding:5px 9px;color:#eceee9;background:#262f33;border-radius:6px;cursor:pointer;font:600 12px var(--mono,monospace)}
+.cp-part-legend b{color:#f2c18f;font-size:11px}.cp-part-legend button[aria-pressed=true],.cp-part-legend button:hover{border-color:#ffc797;background:#423a32;color:#ffdbb9}
+.cp-duct-gauge{width:min(100%,295px);filter:drop-shadow(0 7px 11px #04070986)}.cp-duct-gauge svg{display:block;width:100%;height:auto}
+.cp-cdu-unit{position:relative;display:grid;gap:14px;width:min(100%,280px);padding:21px 23px;border-radius:13px;background:linear-gradient(116deg,#545852,#393e3a 70%);border:1px solid #73796e;box-shadow:inset 0 2px 2px #a5a99f4d,0 5px 10px #0009}
+.cp-cdu-display{display:flex;flex-direction:column;justify-content:space-between;min-height:90px;padding:10px 13px 9px;border:4px solid #262c28;border-radius:6px;box-shadow:inset 0 1px 7px #000;background:linear-gradient(122deg,#18241c,#07110d);font:600 21px/1.2 monospace;color:#ecf7ec}
+.cp-cdu-display>span{font:10px var(--mono,monospace);color:#859e8e;letter-spacing:.1em}
+.cp-cdu-line{min-height:27px;overflow-wrap:anywhere}
+.cp-cdu-keys{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;justify-items:center}
+.cp-cdu-keys button{min-width:44px;min-height:42px;padding:4px 10px;border:2px solid #131a16;border-top-color:#737870;border-radius:40%;background:linear-gradient(155deg,#454c48,#202622);box-shadow:0 2px 2px #1118;color:#f2f1e4;font:600 18px/1.2 var(--mono,monospace);cursor:pointer}
+.cp-cdu-keys button[data-cp-entry=CLR]{border-radius:5px;font-size:14px}
+.cp-cdu-keys button:active{transform:translateY(1px)}.cp-cdu-keys button:focus-visible,.cp-part-legend button:focus-visible,.cp-part-marker:focus-visible{outline:3px solid #fff5bc;outline-offset:3px}
+.cp-duct-gauge .cp-screen{background:transparent}
