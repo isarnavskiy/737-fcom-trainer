@@ -255,8 +255,26 @@
     return esc(text) + ' ' + source;
   }
 
+  // Options are shown in a fresh random order on every attempt so that the position of the
+  // right answer cannot be memorised. Answers are still stored as indices into step.options.
+  function shuffledOrder(length) {
+    const order = Array.from({ length }, (_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order;
+  }
+
+  function validOrder(order, steps) {
+    return Array.isArray(order) && order.length === steps.length && order.every((row, i) => Array.isArray(row) &&
+      row.length === steps[i].options.length && row.slice().sort((a, b) => a - b).every((value, k) => value === k));
+  }
+
+  const pendingRuns = {};
+
   function startRun(steps) {
-    return { index: 0, answers: Array(steps.length).fill(null), checked: false };
+    return { index: 0, answers: Array(steps.length).fill(null), checked: false, order: steps.map(step => shuffledOrder(step.options.length)) };
   }
 
   function validRun(raw, steps) {
@@ -265,9 +283,10 @@
     const answers = raw.answers.map((answer, i) => (
       Number.isInteger(answer) && answer >= 0 && answer < steps[i].options.length ? answer : null
     ));
+    const order = validOrder(raw.order, steps) ? raw.order : steps.map(step => shuffledOrder(step.options.length));
     const gap = answers.slice(0, raw.index).findIndex(answer => answer === null);
-    if (gap >= 0) return { index: gap, answers, checked: false };
-    return { index: raw.index, answers, checked: Boolean(raw.checked && answers[raw.index] !== null) };
+    if (gap >= 0) return { index: gap, answers, checked: false, order };
+    return { index: raw.index, answers, checked: Boolean(raw.checked && answers[raw.index] !== null), order };
   }
 
   function wrongAnswers(answers, steps) {
@@ -296,7 +315,8 @@
       ${display(current.display || lesson.scenario.display)}
       ${exhibit(current.exhibit || lesson.scenario.exhibit)}
       <form data-ll-form><fieldset><legend id="ll-question" tabindex="-1">${esc(current.question)}</legend>
-        <div class="ll-options">${current.options.map((option, i) => {
+        <div class="ll-options">${run.order[run.index].map(i => {
+          const option = current.options[i];
           const checked = picked === i;
           const result = run.checked && (i === current.answer ? 'll-option-right' : checked ? 'll-option-wrong' : '');
           return `<label class="ll-option ${result || ''}"><input type="radio" name="ll-answer" value="${i}" ${checked ? 'checked' : ''} ${run.checked ? 'disabled' : ''} required><span>${esc(option)}</span>
@@ -338,7 +358,9 @@
     const result = api().progress().results[lesson.id];
     if (result && result.total === steps.length && Number.isInteger(result.score) &&
         result.score >= 0 && result.score <= result.total) return resultView(lesson, result);
-    return activeStep(lesson, startRun(steps));
+    // Keep the unsaved first run so the bound handlers see the same option order as the page.
+    pendingRuns[lesson.id] = startRun(steps);
+    return activeStep(lesson, pendingRuns[lesson.id]);
   }
 
   window.RenderLesson = function renderLesson(id, mode) {
@@ -378,7 +400,8 @@
     bindExhibits(host);
     const id = lesson.id;
     const steps = lesson.scenario.steps;
-    const run = validRun(api().getRun(id), steps) || startRun(steps);
+    const run = validRun(api().getRun(id), steps) || pendingRuns[id] || startRun(steps);
+    delete pendingRuns[id];
     const redraw = (html, focus) => {
       host.innerHTML = html;
       bindPractice(lesson, host);

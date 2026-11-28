@@ -14,6 +14,7 @@
 <p align="center">
   <a href="https://isarnavskiy.github.io/737-fcom-trainer/#theory"><b>Уроки</b></a> &nbsp;·&nbsp;
   <a href="https://isarnavskiy.github.io/737-fcom-trainer/#scenarios"><b>Сценарии</b></a> &nbsp;·&nbsp;
+  <a href="https://isarnavskiy.github.io/737-fcom-trainer/#drill"><b>Наизусть</b></a> &nbsp;·&nbsp;
   <a href="https://isarnavskiy.github.io/737-fcom-trainer/#atlas"><b>Атлас FCOM</b></a> &nbsp;·&nbsp;
   <a href="https://isarnavskiy.github.io/737-fcom-trainer/#reference"><b>Первоисточники</b></a>
 </p>
@@ -36,6 +37,8 @@
 | [Кабина](https://isarnavskiy.github.io/737-fcom-trainer/#cockpit) | 13 приборов и панелей на двух фотографиях. Каждый можно рассмотреть крупнее и попробовать в отдельном задании. |
 | [Теория](https://isarnavskiy.github.io/737-fcom-trainer/#theory) | 61 урок по ограничениям, процедурам, характеристикам и системам самолёта. Из урока можно перейти к сценарию и страницам руководства. |
 | [Сценарии](https://isarnavskiy.github.io/737-fcom-trainer/#scenarios) | 61 ситуация и 183 решения с объяснениями. [Журнал прогресса](https://isarnavskiy.github.io/737-fcom-trainer/#progress) запоминает результаты и темы для повторения на этом устройстве. |
+| [Наизусть](https://isarnavskiy.github.io/737-fcom-trainer/#drill) | 79 карточек с интервальным повторением: ограничения и числа, memory items QRH, манёвры (сваливание, сдвиг ветра, PULL UP, TCAS RA, прерванный взлёт) и сокращения. Шаги действий по памяти можно собирать по порядку. Для каждой колоды есть шпаргалка для печати. |
+| [Контрольный тест](https://isarnavskiy.github.io/737-fcom-trainer/#exam) | 10, 20 или 30 случайных вопросов из всех сценариев или одного модуля. Ответы проверяются в конце, как на проверке. Зачёт от 75 %, разбор со ссылками на уроки и страницы FCOM. |
 | [Атлас FCOM](https://isarnavskiy.github.io/737-fcom-trainer/#atlas) | Поиск по 2 403 тематическим закладкам двух томов. В карточках есть пояснения, номера страниц и связанные занятия. Для разделов и подразделов подготовлены 186 авторских заметок. |
 
 ### Заниматься без интернета
@@ -56,6 +59,8 @@
 - **Boeing** предоставляет англоязычный FCOM по лицензии. В русском издании указан перевод с помощью ИИ и приоритет английского оригинала. [Руководства Boeing](https://services.boeing.com/training-solutions/flight-training/licensed-manuals) · [MyBoeingFleet](https://services.boeing.com/operations/myboeingfleet-portal)
 - **FAA AC 120-71B** описывает стандартные процедуры и обязанности пилота, контролирующего полёт. [Читать PDF](docs/faa-ac-120-71b.pdf) · [Страница FAA](https://www.faa.gov/regulations_policies/advisory_circulars/index.cfm/go/document.information/documentID/1030486)
 - **Фотографии кабины** сняли Kurush Pawar и Artem Katranzhi. На обложке — Boeing 737-800 авиакомпании Jet Airways, борт VT-JBE. [Оригиналы и лицензия CC BY-SA 2.0](PHOTO-CREDITS.md)
+
+Значения из AFM, QRH и табличек в разделе «Наизусть» приведены для типового 737-800 с двигателями CFM56-7B. Они помечены в карточках, их нужно сверить с документами своего эксплуатанта.
 
 Тренажёр предназначен для самостоятельных занятий и домашнего симулятора. Для лётной работы применяют действующую утверждённую документацию эксплуатанта.
 
